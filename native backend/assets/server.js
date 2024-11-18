@@ -47,6 +47,8 @@ app.post('/register',async (req,res)=>{
     else{
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+        const db = client.db("users");
+    const collection = db.collection('user_details');
         req.body.password= hashedPassword;
         await collection.insertOne(req.body)
         responseObj.message= 'User registered success'
