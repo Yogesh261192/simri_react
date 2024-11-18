@@ -76,6 +76,7 @@ const storedHashedPassword = user_list[0].password; // Password from the databas
 const isPasswordMatch = await bcrypt.compare(userInputPassword, storedHashedPassword);
 if (isPasswordMatch) {
   console.log("Password matches");
+  responseObj.error= false 
   responseObj.user_exist= true 
   responseObj.message= 'Login success' 
   res.send(responseObj)
