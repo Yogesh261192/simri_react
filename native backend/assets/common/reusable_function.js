@@ -7,4 +7,4 @@ async function  getUserDetails(userObj, client) {
  return user_list
 }
 
-module.exports= getUserDetails
+module.exports= {getUserDetails}

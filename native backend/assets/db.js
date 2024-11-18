@@ -2,7 +2,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 
 
 // Replace with your connection string
-const uri = 'mongodb+srv://yogesh:Mbdio2611@cluster0.iwztn.mongodb.net/sample_mflix?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://yogesh:Mbdio2611@cluster0.iwztn.mongodb.net/users?retryWrites=true&w=majority';
 
 // Create a new MongoClient
 const client = new MongoClient(uri, {

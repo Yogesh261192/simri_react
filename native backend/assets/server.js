@@ -4,7 +4,7 @@ var bodyParser = require('body-parser')
 const PORT= process.env.PORT || 3000
 const bcrypt = require('bcrypt')
 const connectToDB = require('./db');
-const getUserDetails =require('./common/reusable_function')
+const {getUserDetails} =require('./common/reusable_function')
 let client;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
