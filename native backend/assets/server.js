@@ -4,7 +4,16 @@ var bodyParser = require('body-parser')
 const PORT= process.env.PORT || 3000
 const bcrypt = require('bcrypt')
 const connectToDB = require('./db');
-const {getUserDetails} =require('./common/reusable_function')
+const {getUserDetails} =require('./common/reusable_function');
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Use your email service (e.g., Gmail, Yahoo, etc.)
+    auth: {
+      user: 'yogeshmamgain2611@gmail.com', // Replace with your email
+      pass: 'Mbdio@2611', // Replace with your email password or app password
+    },
+  });
+  
 let client;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,7 +60,24 @@ app.post('/register',async (req,res)=>{
     const collection = db.collection('user_details');
         req.body.password= hashedPassword;
         await collection.insertOne(req.body)
+
         responseObj.message= 'User registered success'
+        const mailOptions = {
+            from: 'yogeshmamgain2611@gmail.com', // Sender's email
+            to: 'someshmamgain76@gmail.com ', // Recipient's email
+            cc:'ranakotianchita1997@gmail.com ',
+            subject: 'Naya koi aaya hai',
+            text: `Someone registered from num ${phone}`,
+          };
+          
+          // Send the email
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.error('Error sending email:', error);
+            } else {
+              console.log('Email sent successfully:', info.response);
+            }
+          });
         // res.send(responseObj)
     }
     res.send(responseObj);
