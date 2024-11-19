@@ -7,7 +7,11 @@ const bcrypt = require('bcrypt')
 const connectToDB = require('./db');
 const {getUserDetails} =require('./common/reusable_function');
 const nodemailer = require('nodemailer');
-app.use(cors());
+app.use(cors({
+    origin: '*', // This allows requests from any origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+}));
 const transporter = nodemailer.createTransport({
     service: 'gmail', // Use your email service (e.g., Gmail, Yahoo, etc.)
     auth: {
