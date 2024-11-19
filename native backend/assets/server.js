@@ -98,7 +98,8 @@ app.post('/login', async(req,res)=>{
         return
     }
 
-    const userInputPassword = password // Password entered by the user
+    try {
+        const userInputPassword = password // Password entered by the user
 const storedHashedPassword = user_list.password; // Password from the database
 
 const isPasswordMatch = await bcrypt.compare(userInputPassword, storedHashedPassword);
@@ -116,6 +117,9 @@ if (isPasswordMatch) {
     res.send(responseObj)
   console.log("Password does not match");
 }
+    } catch (error) {
+        res.send(JSON.stringify(error))
+    }
 
 })
 app.post('/buy', async(req,res)=>{
@@ -150,7 +154,7 @@ app.post('/delivery', async (req,res)=>{
         text: `${JSON.stringify(req.body)}`,
       };
 
-      
+
       
       // Send the email
       transporter.sendMail(mailOptions, (error, info) => {
