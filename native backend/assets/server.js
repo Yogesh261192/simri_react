@@ -49,7 +49,7 @@ app.post('/register',async (req,res)=>{
     
     let phone= req.body.phone;
     let user_list = await getUserDetails(req.body, client)
-    if(user_list.length){
+    if(user_list){
         responseObj.user_exist= true 
         responseObj.message= 'User already registered' 
     }
@@ -66,8 +66,8 @@ app.post('/register',async (req,res)=>{
             from: 'yogeshmamgain2611@gmail.com', // Sender's email
             to: 'someshmamgain76@gmail.com ', // Recipient's email
             cc:'ranakotianchita1997@gmail.com ',
-            subject: 'Naya koi aaya hai',
-            text: `Someone registered from num ${phone}`,
+            subject: 'New user details',
+            text: `Someone registered from number ${phone}`,
           };
           
           // Send the email
@@ -88,7 +88,7 @@ app.post('/login', async(req,res)=>{
     console.log(req.query);
     const {phone, password}=req.body;
     let user_list = await getUserDetails(req.body, client)
-    if(!user_list.length){
+    if(!user_list){
         responseObj.user_exist= false 
         responseObj.error= true ;
         responseObj.message= 'User not registered' 
@@ -115,6 +115,27 @@ if (isPasswordMatch) {
   console.log("Password does not match");
 }
 
+})
+app.post('/buy', async(req,res)=>{
+    console.log(req.body);
+    const mailOptions = {
+        from: 'yogeshmamgain2611@gmail.com', // Sender's email
+        to: 'someshmamgain76@gmail.com ', // Recipient's email
+        cc:'ranakotianchita1997@gmail.com ',
+        subject: 'Buy details',
+        text: `${req.body}`,
+      };
+      
+      // Send the email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+        } else {
+          console.log('Email sent successfully:', info.response);
+        }
+      });
+      responseObj.message='Order received'
+      res.send(responseObj)
 })
 connectToDB()
     .then((connectedClient) => {
