@@ -137,6 +137,51 @@ app.post('/buy', async(req,res)=>{
       responseObj.message='Order received'
       res.send(responseObj)
 })
+
+app.post('/delivery', async (req,res)=>{
+    console.log(req.body);
+    const mailOptions = {
+        from: 'yogeshmamgain2611@gmail.com', // Sender's email
+        to: 'someshmamgain76@gmail.com ', // Recipient's email
+        cc:'ranakotianchita1997@gmail.com ',
+        subject: 'Delivery details',
+        text: `${JSON.stringify(req.body)}`,
+      };
+      
+      // Send the email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+        } else {
+          console.log('Email sent successfully:', info.response);
+        }
+      });
+      responseObj.message='Delivery order received'
+      res.send(responseObj)
+})
+app.post('/ride', async (req,res)=>{
+    console.log(req.body);
+    const mailOptions = {
+        from: 'yogeshmamgain2611@gmail.com', // Sender's email
+        to: 'someshmamgain76@gmail.com ', // Recipient's email
+        cc:'ranakotianchita1997@gmail.com ',
+        subject: 'Ride details',
+        text: `${JSON.stringify(req.body)}`,
+      };
+      
+      // Send the email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+        } else {
+          console.log('Email sent successfully:', info.response);
+        }
+      });
+      responseObj.message='Ride request'
+      res.send(responseObj)
+})
+
+
 connectToDB()
     .then((connectedClient) => {
         client = connectedClient; // Store the connected client
