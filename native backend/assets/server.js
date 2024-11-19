@@ -149,6 +149,8 @@ app.post('/delivery', async (req,res)=>{
         subject: 'Delivery details',
         text: `${JSON.stringify(req.body)}`,
       };
+
+      
       
       // Send the email
       transporter.sendMail(mailOptions, (error, info) => {
