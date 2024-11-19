@@ -123,7 +123,7 @@ app.post('/buy', async(req,res)=>{
         to: 'someshmamgain76@gmail.com ', // Recipient's email
         cc:'ranakotianchita1997@gmail.com ',
         subject: 'Buy details',
-        text: `${req.body}`,
+        text: `${JSON.stringify(req.body)}`,
       };
       
       // Send the email
