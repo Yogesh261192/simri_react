@@ -1,11 +1,13 @@
 const express= require('express');
 const app = express();
+const cors= require('cors')
 var bodyParser = require('body-parser')
 const PORT= process.env.PORT || 3000
 const bcrypt = require('bcrypt')
 const connectToDB = require('./db');
 const {getUserDetails} =require('./common/reusable_function');
 const nodemailer = require('nodemailer');
+app.use(cors());
 const transporter = nodemailer.createTransport({
     service: 'gmail', // Use your email service (e.g., Gmail, Yahoo, etc.)
     auth: {
@@ -65,7 +67,7 @@ app.post('/register',async (req,res)=>{
         const mailOptions = {
             from: 'yogeshmamgain2611@gmail.com', // Sender's email
             to: 'someshmamgain76@gmail.com ', // Recipient's email
-            cc:'ranakotianchita1997@gmail.com ',
+            cc:'yogeshmamgain2611@gmail.com ',
             subject: 'New user details',
             text: `Someone registered from number ${phone}`,
           };
@@ -97,7 +99,7 @@ app.post('/login', async(req,res)=>{
     }
 
     const userInputPassword = password // Password entered by the user
-const storedHashedPassword = user_list[0].password; // Password from the database
+const storedHashedPassword = user_list.password; // Password from the database
 
 const isPasswordMatch = await bcrypt.compare(userInputPassword, storedHashedPassword);
 if (isPasswordMatch) {
@@ -143,7 +145,7 @@ app.post('/delivery', async (req,res)=>{
     const mailOptions = {
         from: 'yogeshmamgain2611@gmail.com', // Sender's email
         to: 'someshmamgain76@gmail.com ', // Recipient's email
-        cc:'ranakotianchita1997@gmail.com ',
+        cc:'yogeshmamgain2611@gmail.com',
         subject: 'Delivery details',
         text: `${JSON.stringify(req.body)}`,
       };
@@ -164,7 +166,7 @@ app.post('/ride', async (req,res)=>{
     const mailOptions = {
         from: 'yogeshmamgain2611@gmail.com', // Sender's email
         to: 'someshmamgain76@gmail.com ', // Recipient's email
-        cc:'ranakotianchita1997@gmail.com ',
+        cc:'yogeshmamgain2611@gmail.com ',
         subject: 'Ride details',
         text: `${JSON.stringify(req.body)}`,
       };
