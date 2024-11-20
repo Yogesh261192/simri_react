@@ -32,10 +32,10 @@ const MyModal = ({ current, onClose }) => {
 
           {/* Icons section */}
           <View style={styles.iconsContainer}>
-            <TouchableOpacity onPress={() => openLink('https://www.facebook.com/pradeep.badola.3701?mibextid=ZbWKwL')}>
+            <TouchableOpacity onPress={() => openLink('https://www.facebook.com/Yoursimdi')}>
               <Feather name="facebook" size={24} color="blue" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => openLink('https://www.instagram.com/iamsrk/?hl=en')}>
+            <TouchableOpacity onPress={() => openLink('https://www.instagram.com/yoursimdi/profilecard/?igsh=MWJ2MGJpNmR1bzF2NA==')}>
               <Feather name="instagram" size={24} color="red" />
             </TouchableOpacity>
           </View>
