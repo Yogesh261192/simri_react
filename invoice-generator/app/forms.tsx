@@ -1,91 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform ,ScrollView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform ,ScrollView, Switch} from 'react-native';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Ionicons } from '@expo/vector-icons'; // For the forward arrow icon
-
-
-const generatePDF = async (data) => {
-  try {
-    // const data = {
-    //     title: "Invoice",
-    //     date: "2025-01-23",
-    //     customerName: "John Doe",
-    //     items: [
-    //       { name: "Item A", quantity: 2, price: 10 },
-    //       { name: "Item B", quantity: 1, price: 15 },
-    //       { name: "Item C", quantity: 3, price: 7 }
-    //     ]
-    //   };
-    const response = await fetch('http://13.60.56.185:3001/generate-pdf', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to generate PDF');
-    }
-
-    // Convert response to Blob
-    const blob = await response.blob();
-
-    // Convert Blob to Base64
-    const base64Data = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result.split(',')[1]); // Remove the prefix
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-
-    // Define file name and path
-    const fileName = 'invoice_2025_01_26.pdf';
-    const filePath = `${FileSystem.documentDirectory}${fileName}`;
-
-    // Save the file
-    await FileSystem.writeAsStringAsync(filePath, base64Data, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    // Verify the file exists
-    const fileInfo = await FileSystem.getInfoAsync(filePath);
-    if (fileInfo.exists) {
-    //   Alert.alert('File Saved', `File saved successfully at: ${filePath}`);
-
-      if (Platform.OS === 'android') {
-        // Use IntentLauncher for Android
-        const contentUri = await FileSystem.getContentUriAsync(filePath);
-        try {
-          await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
-            data: contentUri,
-            flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
-            type: 'application/pdf',
-          });
-        } catch (error) {
-          Alert.alert('Error', 'No app available to open the PDF.');
-        }
-      } else if (Platform.OS === 'ios') {
-        // Use Sharing for iOS
-        if (await Sharing.isAvailableAsync()) {
-          await Sharing.shareAsync(filePath);
-        } else {
-          Alert.alert('Error', 'Sharing not available on iOS.');
-        }
-      }
-    } else {
-      Alert.alert('Error', 'File could not be saved or located.');
-    }
-  } catch (error) {
-    console.error('Error generating PDF:', error.message);
-    Alert.alert('Error', `An error occurred: ${error.message}`);
-  }
-};
+import Checkbox from 'expo-checkbox';
+import generatePDF from '../generator'
 
 const MultiStepForm = () => {
     const [currentStep, setCurrentStep] = useState(0);
+    const [isChecked, setChecked]= useState(false)
     const [shipTo, setShipTo] = useState('');
     const [shipToname, setshipToname] =useState('')
     const [shipToGST, setShipToGST] = useState('');
@@ -95,16 +19,31 @@ const MultiStepForm = () => {
     const [billToGST, setBillToGST] = useState('');
     const [billToState, setBillToState] = useState('');
     const [billToName, setbillToName] =useState('')
+    const [isIGST, setIsIGST] = useState(false);
 
     const [billToStateCode, setBillToStateCode] = useState('');
     const [invoiceDetails, setInvoiceDetails] = useState({});
     const [products, setProducts] = useState([]);
-    const [currentProduct, setCurrentProduct] = useState({ name: '', hsn: '', qty: '', price: '' });
-  
+    const [currentProduct, setCurrentProduct] = useState({ name: '', hsn: '', qty: '', price: '', unit:'' });
+    useEffect(() => {
+      if (isChecked) {
+        setbillToName(shipToname);
+        setBillTo(shipTo);
+        setBillToGST(shipToGST);
+        setBillToState(shipToState);
+        setBillToStateCode(shipToStateCode);
+      } else {
+        setbillToName('');
+        setBillTo('');
+        setBillToGST('');
+        setBillToState('');
+        setBillToStateCode('');
+      }
+    }, [isChecked, shipToname, shipTo, shipToGST, shipToState, shipToStateCode]);
     const handleAddProduct = () => {
       if (currentProduct.name && currentProduct.qty && currentProduct.price) {
         setProducts([...products, currentProduct]);
-        setCurrentProduct({ name: '', hsn: '', qty: '', price: '' });
+        setCurrentProduct({ name: '', hsn: '', qty: '', price: '', unit:'' });
       } else {
         alert('Please fill all required fields');
       }
@@ -146,9 +85,9 @@ const MultiStepForm = () => {
         invoice_details: invoiceDetails,
       };
   
-      console.log('Form Data:', formData);
+      // console.log('Form Data:', formData);
       // Replace generatePDF with your logic for processing or submitting the data
-      generatePDF(formData);
+      generatePDF(formData, 'generate-pdf');
     };
   
     const renderForm = () => {
@@ -156,7 +95,7 @@ const MultiStepForm = () => {
         case 0:
           return (
             <View style={styles.form}>
-              <Text style={styles.heading}>Ship To</Text>
+              <Text style={styles.heading_in}>Ship To</Text>
               <View style={styles.formDetails}>
               <TextInput
                   style={styles.input}
@@ -199,7 +138,7 @@ const MultiStepForm = () => {
         case 1:
           return (
             <View style={styles.form}>
-              <Text style={styles.heading}>Bill To</Text>
+              <Text style={styles.heading_in}>Bill To</Text>
               <View style={styles.formDetails}>
               <TextInput
                   style={styles.input}
@@ -232,6 +171,15 @@ const MultiStepForm = () => {
                   onChangeText={setBillToStateCode}
                 />
               </View>
+              <View style={styles.section}>
+        <Checkbox
+          style={styles.checkbox}
+          value={isChecked}
+          onValueChange={setChecked}
+          color={isChecked ? '#4630EB' : undefined}
+        />
+        <Text style={styles.paragraph}>Same as ship to.</Text>
+      </View>
               <View style={styles.button_all}>
                 <TouchableOpacity style={styles.backButton} onPress={handleBack}>
                   <Text style={styles.buttonText}>Back</Text>
@@ -240,6 +188,8 @@ const MultiStepForm = () => {
                   <Text style={styles.buttonText}>Next</Text>
                 </TouchableOpacity>
               </View>
+              
+            
             </View>
           );
         case 2:
@@ -260,6 +210,12 @@ const MultiStepForm = () => {
                     placeholder="HSN/SAC"
                     value={currentProduct.hsn}
                     onChangeText={(text) => handleInputChange("hsn", text)}
+                  />
+                   <TextInput
+                    style={styles.input}
+                    placeholder="UNIT"
+                    value={currentProduct.unit}
+                    onChangeText={(text) => handleInputChange("unit", text)}
                   />
                   <TextInput
                     style={styles.input}
@@ -283,6 +239,7 @@ const MultiStepForm = () => {
                 <ScrollView
       showsVerticalScrollIndicator={true}
       style={styles.productScrollView}
+      nestedScrollEnabled
     >
       {products.map((product, index) => (
         <View key={index} style={styles.productCard}>
@@ -291,6 +248,7 @@ const MultiStepForm = () => {
             <Text style={styles.productText}>HSN/SAC: {product.hsn}</Text>
             <Text style={styles.productText}>QTY: {product.qty}</Text>
             <Text style={styles.productText}>Price: {product.price}</Text>
+            <Text style={styles.productText}>Unit: {product.unit}</Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -349,13 +307,6 @@ const MultiStepForm = () => {
               />
                <TextInput
                 style={styles.input}
-                placeholder="Delivery Note"
-                onChangeText={(text) =>
-                  setInvoiceDetails({ ...invoiceDetails, deliveryNote: text })
-                }
-              />
-               <TextInput
-                style={styles.input}
                 placeholder="Payment Mode"
                 onChangeText={(text) =>
                   setInvoiceDetails({ ...invoiceDetails, paymentMode: text })
@@ -383,13 +334,58 @@ const MultiStepForm = () => {
                   setInvoiceDetails({ ...invoiceDetails, motorNum: text })
                 }
               />
-              <TextInput
-                style={styles.input}
-                placeholder="IGST%"
-                onChangeText={(text) =>
-                  setInvoiceDetails({ ...invoiceDetails, igst: text })
-                }
-              />
+               <View style={styles.toggleContainer}>
+        <Text>Use IGST?</Text>
+        <Switch 
+  value={isIGST} 
+  onValueChange={() => {
+    setIsIGST((prev) => {
+      const newIsIGST = !prev;
+      setInvoiceDetails({
+        ...invoiceDetails,
+        igst: newIsIGST ? '' : '',  // Reset IGST when switching
+        cgst: newIsIGST ? '' : '',  // Reset CGST when switching
+        sgst: newIsIGST ? '' : ''   // Reset SGST when switching
+      });
+      return newIsIGST;
+    });
+  }} 
+/>
+      </View>
+
+      {isIGST ? (
+        <TextInput
+          style={styles.input}
+          placeholder="IGST%"
+          keyboardType="numeric"
+          onChangeText={(text) =>
+            setInvoiceDetails({ ...invoiceDetails, igst: text})
+          }
+          value={invoiceDetails.igst}
+        />
+      ) : (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="CGST%"
+            keyboardType="numeric"
+            onChangeText={(text) =>
+              setInvoiceDetails({ ...invoiceDetails, cgst: text })
+            }
+            value={invoiceDetails.cgst}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="SGST%"
+            keyboardType="numeric"
+            onChangeText={(text) =>
+              setInvoiceDetails({ ...invoiceDetails, sgst: text})
+            }
+            value={invoiceDetails.sgst}
+          />
+        </>
+      )}
+              
               <TextInput
                 style={styles.input}
                 placeholder="Destination"
@@ -413,17 +409,25 @@ const MultiStepForm = () => {
       }
     };
   
-    return <View style={styles.container}>{renderForm()}</View>;
+    return <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled><View style={styles.container}>{renderForm()}</View></ScrollView>;
   };
   
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1, // Allows scrolling when content exceeds the screen height
+    // paddingVertical: 20,
+    backgroundColor:'red'
+
+  },
     container: {
-      flex: 1,
+      // flex: 1,
       backgroundColor: '#f9f9f9',
       justifyContent: 'center', // Centers the content vertically
       alignItems: 'center', 
-      padding:0// Centers the content horizontally
+      padding:0,// Centers the content horizontally
+      overflow:'scroll',
+      height:'100%'
     },
     form: {
       width: '100%', // Ensures the form doesn't exceed the screen width
@@ -437,7 +441,8 @@ const styles = StyleSheet.create({
       elevation: 5,
       alignItems: 'center', 
       flex:1,
-      justifyContent:'space-between'
+      justifyContent:'space-between',
+      overflow:'scroll'
       
       // Align content inside the form
     },
@@ -584,7 +589,32 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       borderRadius: 8,
       paddingHorizontal: 20,
-        }
+        },
+        section:{
+          flexDirection:'row',
+          // backgroundColor:'red',
+          justifyContent:'space-between',
+          position:'relative',
+          left:'33%',
+          bottom:'15%',
+          alignItems:'center'
+        },
+        paragraph:{
+          fontSize:14,
+          marginLeft:4,
+          display:'flex',
+         
+        },
+        checkbox:{
+          width:15,
+          height:15,
+        },
+        toggleContainer: {
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 10,
+        },
   });
   
 

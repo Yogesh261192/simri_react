@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "invoice-generator",
-    "slug": "invoice-generator",
-    "version": "1.0.0",
+    "name": "simdi",
+    "slug": "simdi",
+    "version": "1.2.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo.png",
+    "icon":  "./assets/images/taxi_icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,13 +13,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/taxi_icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.mamgain2611.invoicegenerator",
-      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
- 
+      "package": "com.mamgain2611.new_simri_app",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM"
+        }
+      }
     },
+    
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -28,10 +33,11 @@
     "plugins": [
       "expo-router",
       "./config_1",
+
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/taxi_icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
@@ -46,9 +52,11 @@
         "origin": false
       },
       "eas": {
-        "projectId": "2a82424e-e227-483c-81f7-bc45ab8cb0ed"
-      }
+        "projectId": "bf6580db-3aed-423c-a1d8-b81f9c0041ee"
+      },
+        "googleMapsApiKey": "AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM"
+
     }
-   
   }
 }
+

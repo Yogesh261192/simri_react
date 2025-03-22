@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Alert,  } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, Alert,
+  Image, 
+  KeyboardAvoidingView, 
+  Platform 
+  } from 'react-native';
 import {account} from '../appwriteConfig';
 import Loader from '@/components/Loader';
 import { useRouter } from 'expo-router';
-// import { isLoading } from 'expo-font';
+// importcdg } from 'expo-font';
 import { UserContext, UserProvider} from '@/components/userDetaisl';
 // console.log(account, 'aa');
 const Index = () => {
@@ -20,8 +24,8 @@ const Index = () => {
     // alert('11')
     console.log(email, password)
     setIsload(true)
-    if(email=="sharukh@gmail.com" && password=="12345"){
-      router.push('/forms')
+    if(email=="yogesh@gmail.com" && password=="12345"){
+      router.push('/sample')
     }
     else{
       setIsload(false)
@@ -44,18 +48,25 @@ promise.then(function (response) {
 });
   }
   return (
-    <UserProvider >
-  <View style={styles.container}>
+    <UserProvider>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={styles.container}
+      >
+        <Image source={require("../assets/images/logo.png")} style={styles.logo} />
+        
+        <Text style={styles.title}>PDF Generator</Text>
+        
         <View style={styles.inputBox}>
           <TextInput
             style={styles.input}
             placeholder="Username or Mobile"
             placeholderTextColor="#aaa"
             value={email} 
-            onChangeText={(value)=>{ setEmail(value)}}
+            onChangeText={setEmail}
           />
         </View>
-
+        
         <View style={styles.inputBox}>
           <TextInput
             style={styles.input}
@@ -63,36 +74,39 @@ promise.then(function (response) {
             placeholderTextColor="#aaa"
             secureTextEntry={true}
             value={password} 
-            onChangeText={(value)=>{ setPassword(value)}}
-            />
+            onChangeText={setPassword}
+          />
         </View>
-
-        <TouchableOpacity style={styles.loginButton} onPress={()=>{doLogin()}}>
-          <Text style={styles.loginButtonText} >Login</Text>
+        
+        <TouchableOpacity style={styles.loginButton} onPress={doLogin}>
+          <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
-        <Loader visible={isLoad}></Loader>
-      </View>
+        
+        <Loader visible={isLoad} />
+      </KeyboardAvoidingView>
     </UserProvider>
-    
   );
 };
 
 export default Index;
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: 'contain', // Ensures the background image covers the entire screen
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor:"white"
+    backgroundColor: "#f5f5f5"
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,
+    resizeMode: 'contain',
+    borderRadius:15
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 30,
@@ -104,7 +118,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ccc',
-    overflow: 'hidden',
+    paddingHorizontal: 10,
   },
   input: {
     padding: 15,
@@ -118,6 +132,11 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
   },
   loginButtonText: {
     color: '#fff',
@@ -125,3 +144,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
