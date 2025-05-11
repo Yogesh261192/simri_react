@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform ,ScrollView, Switch} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform ,ScrollView, Switch, } from 'react-native';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { Ionicons } from '@expo/vector-icons'; // For the forward arrow icon
+import { Ionicons, Feather } from '@expo/vector-icons'; // For the forward arrow icon
 import Checkbox from 'expo-checkbox';
 import generatePDF from '../generator'
+import { useRouter } from 'expo-router';
+
 
 const MultiStepForm = () => {
+  const router = useRouter()
     const [currentStep, setCurrentStep] = useState(0);
     const [isChecked, setChecked]= useState(false)
     const [shipTo, setShipTo] = useState('');
@@ -40,6 +43,9 @@ const MultiStepForm = () => {
         setBillToStateCode('');
       }
     }, [isChecked, shipToname, shipTo, shipToGST, shipToState, shipToStateCode]);
+    function handleNavigate(path){
+      router.push(path)
+    }
     const handleAddProduct = () => {
       if (currentProduct.name && currentProduct.qty && currentProduct.price) {
         setProducts([...products, currentProduct]);
@@ -393,6 +399,13 @@ const MultiStepForm = () => {
                   setInvoiceDetails({ ...invoiceDetails, destination: text })
                 }
               />
+               <TextInput
+                style={styles.input}
+                placeholder="Dispatch From"
+                onChangeText={(text) =>
+                  setInvoiceDetails({ ...invoiceDetails, dispatch_from: text })
+                }
+              />
               </View>
               <View style={styles.button_all}>
                 <TouchableOpacity style={styles.backButton} onPress={handleBack}>
@@ -409,7 +422,20 @@ const MultiStepForm = () => {
       }
     };
   
-    return <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled><View style={styles.container}>{renderForm()}</View></ScrollView>;
+    return  <View style={{ flex: 1 }}>
+    {/* History Button */}
+    <TouchableOpacity
+      style={styles.historyButton}
+      onPress={() => handleNavigate("History")}
+    >
+      <Feather name="download" size={24} color="white" />
+      {/* <Text style={styles.historyText}>History</Text> */}
+    </TouchableOpacity>
+
+    <ScrollView contentContainerStyle={styles.scrollContainer} nestedScrollEnabled>
+      <View style={styles.container}>{renderForm()}</View>
+    </ScrollView>
+  </View>;
   };
   
 
@@ -614,6 +640,28 @@ const styles = StyleSheet.create({
           alignItems: "center",
           justifyContent: "space-between",
           marginBottom: 10,
+        },
+        historyButton: {
+          position: 'absolute',
+          top: 50,
+          right: 20,
+          zIndex: 10,
+          flexDirection: 'column', // Stack icon above text
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#007BFF',
+          padding: 10,
+          borderRadius: 8,
+          elevation: 5, // For Android shadow
+          shadowColor: '#000', // For iOS shadow
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.3,
+          shadowRadius: 3,
+        },
+        historyText: {
+          color: 'white',
+          fontSize: 12,
+          marginTop: 4,
         },
   });
   

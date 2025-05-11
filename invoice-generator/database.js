@@ -1,18 +1,7 @@
-import { Client, Databases } from "appwrite";
 
-const client = new Client();
-console.log('details 2')
+import { Client, Account, ID } from 'react-native-appwrite';
 
-client
-  .setEndpoint('https://cloud.appwrite.io/v1') // Your Appwrite endpoint
-  .setProject('673ebe09000b35b67d8b');// Your project ID
-
-export const databases = new Databases(client);
-
-// const result = await databases.listDocuments(
-//     '<DATABASE_ID>', // databaseId
-//     '<COLLECTION_ID>', // collectionId
-//     [] // queries (optional)
-// );
-
-// console.log(result);
+const client = new Client()
+    .setProject('67e6a31e003b8f9166e7')
+    .setPlatform('com.mamgain2611.invoicegenerator');
+export default client;
