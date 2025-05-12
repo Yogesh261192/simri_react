@@ -10,6 +10,7 @@ import OtpModal from './OtpModal';
 import { useUser } from './userContext';
 import UserButton from './Userinfo';
 import { account } from '../appwriteConfig';
+import { useToast } from './ToastContext';
 
 function Header() {
   const redirect = useRedirect();
@@ -19,6 +20,7 @@ function Header() {
     removeFromCart,
     getTotal
   } = useCart();
+  const { showToast } = useToast();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -61,8 +63,11 @@ const { user,setUser} = useUser();
     const userData = await account.get(); // Fetch user info
     console.log(userData);
     setUser(userData);
+    showToast({ message: 'Login success!', type: 'success' })
+    setIsSignInOpen(false);
     } catch (error) {
-      alert(error)
+      console.log(error.message)
+      showToast({ message: error.message, type: 'error' })
     }
     // setUser(user)
   }
