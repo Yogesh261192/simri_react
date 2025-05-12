@@ -1,8 +1,10 @@
 // components/SignUpModal.jsx
 import React, { useState } from 'react';
 import { account,ID  } from '../appwriteConfig';
+import { useToast } from './ToastContext';
 
 const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
+      const { showToast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -56,12 +58,14 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
         //   const userId = token.userId;
         // setUserId(userId);
         // setIsOtpOpen(true);
+        showToast({message:"Please check your email for verification link", type:"success"})
         setIsSignUpOpen(false);
       
           console.log('User registered:', data);
     } catch (error) {
       console.error(error);
-      alert(error.message || "Failed to register.");
+    //   alert(error.message || "Failed to register.");
+    showToast({message:error.message, type:"error"})
     } finally {
       setLoading(false);
     }
