@@ -29,7 +29,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
     setLoading(true);
 
     try {
-        const response = await fetch('http://13.53.129.76:5000/register', {
+        const response = await fetch('http://localhost:5000/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,12 +41,22 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
               phone: `+91${formData.phone}`, // Include country code if needed
             }),
           });
-      
+        //   const token = await account.createEmailToken(
+        //     ID.unique(),
+        //     formData.email
+        // );
+        await account.createEmailPasswordSession(formData.email, formData.password);
+
+        await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
           const data = await response.json();
-      
+        //   const response_1 = await account.createPhoneVerification();
           if (!response.ok) {
             throw new Error(data.error || 'Registration failed');
           }
+        //   const userId = token.userId;
+        // setUserId(userId);
+        // setIsOtpOpen(true);
+        setIsSignUpOpen(false);
       
           console.log('User registered:', data);
     } catch (error) {

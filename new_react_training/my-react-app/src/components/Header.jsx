@@ -7,6 +7,9 @@ const BUCKET_ID = '6742e69c003e3ca0399e';
 import { databases, storage } from '../appwriteConfig';
 import SignUpModal from './SignUpModal';
 import OtpModal from './OtpModal';
+import { useUser } from './userContext';
+import UserButton from './Userinfo';
+import { account } from '../appwriteConfig';
 
 function Header() {
   const redirect = useRedirect();
@@ -24,6 +27,13 @@ const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 const [isOtpOpen, setIsOtpOpen] = useState(false);
 const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
 const [userId, setUserId] = useState(null);
+const { user,setUser} = useUser();
+// console.log(user)
+ const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
 
   useEffect (()=>{
     const fetchFiles = async () => {
@@ -44,6 +54,22 @@ const [userId, setUserId] = useState(null);
   const handleBuyNow = () => {
     setIsSignInOpen(true);
   };
+  async function handleSignIn(){
+    try {
+      let user= await account.createEmailPasswordSession(formData.email, formData.password);
+    console.log(user)
+    const userData = await account.get(); // Fetch user info
+    console.log(userData);
+    setUser(userData);
+    } catch (error) {
+      alert(error)
+    }
+    // setUser(user)
+  }
+  function handleChange(e){
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  }
 
   const subtotal = getTotal();
   const tax = subtotal * 0.18;
@@ -73,9 +99,7 @@ const [userId, setUserId] = useState(null);
                   </span>
                 )}
               </button>
-              <button className="text-gray-600 hover:text-[#2C5530]">
-                <i className="fas fa-user-circle text-xl"></i>
-              </button>
+              <UserButton setIsSignInOpen={setIsSignInOpen} ></UserButton>
             </div>
           </div>
 
@@ -182,6 +206,8 @@ const [userId, setUserId] = useState(null);
                   type="email"
                   className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
                   placeholder="Enter your email"
+                  onChange={handleChange} value={formData.email}
+                  name="email"
                 />
               </div>
               <div>
@@ -190,6 +216,8 @@ const [userId, setUserId] = useState(null);
                   type="password"
                   className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
                   placeholder="Enter your password"
+                  onChange={handleChange} value={formData.password}
+                  name="password"
                 />
               </div>
 
@@ -202,13 +230,14 @@ const [userId, setUserId] = useState(null);
               </div>
 
               <button
-                type="submit"
+                type="button"
+                onClick={handleSignIn}
                 className="w-full bg-[#2C5530] hover:bg-[#2C5530]/90 text-white py-3 rounded-lg font-medium"
               >
                 Sign In
               </button>
 
-              <div className="relative my-6">
+              {/* <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
@@ -232,7 +261,7 @@ const [userId, setUserId] = useState(null);
                   <i className="fab fa-facebook text-blue-500"></i>
                   Facebook
                 </button>
-              </div>
+              </div> */}
 
               <p className="text-center text-sm text-gray-600 mt-6">
                 Don't have an account?{" "}
@@ -250,7 +279,7 @@ const [userId, setUserId] = useState(null);
       )}
       {/* Sign Up Modal */}
       {isSignUpOpen && <SignUpModal setIsSignUpOpen={setIsSignUpOpen} setIsOtpOpen={setIsOtpOpen} setUserId={setUserId}/>}
-{isOtpOpen && <OtpModal setIsOtpOpen={setIsOtpOpen} otpValues={otpValues} setOtpValues={setOtpValues} />}
+{isOtpOpen && <OtpModal setIsOtpOpen={setIsOtpOpen} otpValues={otpValues} setOtpValues={setOtpValues} userId={userId} setUser= {setUser}/>}
 
     </>
   );

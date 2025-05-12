@@ -10,6 +10,7 @@ import Rides from './components/Rides';
 import Sustainable from './components/Sustainable';
 import ScrollToTop from './components/ScrollToTop';
 import AllProducts from './components/AllProduct';
+import EmailVerificationPage from './components/EmailVerificationPage';
 
 
 function HomePage() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/rides" element={<Rides />} />
           <Route path="/products" element={<AllProducts />} />
+          <Route path="/verify-email" element={<EmailVerificationPage />} />
           {/* Add more routes here if needed */}
         </Routes>
       </div>

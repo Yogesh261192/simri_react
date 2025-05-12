@@ -23,6 +23,9 @@ try {
 
   try {
     const user = await users.create(sdk.ID.unique(), email, phone, password, name);
+    // await users.createVerification(user.$id, {
+    //   url: 'http://simdi.in', // must be whitelisted in Appwrite
+    // });
     res.status(201).json({ user });
   } catch (error) {
     res.status(400).json({ error: error.message });

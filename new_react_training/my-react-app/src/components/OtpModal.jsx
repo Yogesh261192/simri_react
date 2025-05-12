@@ -1,7 +1,27 @@
 // components/OtpModal.jsx
 import React from 'react';
+import { useState } from 'react';
+import { account,ID  } from '../appwriteConfig';
 
-const OtpModal = ({ setIsOtpOpen, otpValues, setOtpValues }) => {
+const OtpModal = ({ setIsOtpOpen, otpValues, setOtpValues, userId, setUser}) => {
+    console.log(userId);
+    async function handleSubmit(e) {
+        e.preventDefault();
+        const otp = otpValues.join('');
+      
+        try {
+            // await account.deleteSession('current');
+          const response = await account.updateVerification(userId, otp);
+          console.log('OTP verified:', response);
+          const user = await account.get();
+          setUser(user)
+          // maybe set session or redirect here
+        } catch (err) {
+          console.error('Failed to verify OTP:', err);
+          alert('Invalid OTP');
+        }
+      }
+    
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
       <div className="bg-white w-full max-w-md rounded-xl p-6">
@@ -59,7 +79,7 @@ const OtpModal = ({ setIsOtpOpen, otpValues, setOtpValues }) => {
               <span>Time remaining: 02:59</span>
             </div>
           </div>
-          <button type="submit" className="!rounded-button whitespace-nowrap cursor-pointer w-full bg-[#2C5530] hover:bg-[#2C5530]/90 text-white py-3 rounded-lg font-medium">
+          <button type="button" onClick={handleSubmit} className="!rounded-button whitespace-nowrap cursor-pointer w-full bg-[#2C5530] hover:bg-[#2C5530]/90 text-white py-3 rounded-lg font-medium">
             Verify & Continue
           </button>
         </form>

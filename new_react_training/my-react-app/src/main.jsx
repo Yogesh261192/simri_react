@@ -1,12 +1,14 @@
-import { render } from 'preact'
-import './index.css'
-import  App  from './app.jsx'
+import { render } from 'preact';
 import './index.css';
+import App from './app.jsx';
 import { CartProvider } from './components/CartContext.jsx';
+import { UserProvider } from './components/userContext.jsx';
 
-
-render(<CartProvider>
-    <App />
+render(
+  <UserProvider>
+    <CartProvider>
+      <App />
     </CartProvider>
-    
-    , document.getElementById('app'))
+  </UserProvider>,
+  document.getElementById('app')
+);
