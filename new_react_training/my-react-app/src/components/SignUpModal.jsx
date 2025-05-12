@@ -29,7 +29,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
     setLoading(true);
 
     try {
-        const response = await fetch('http://simdi.in/register', {
+        const response = await fetch('http://simdi.in:5000/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
