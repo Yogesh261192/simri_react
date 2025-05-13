@@ -1,18 +1,19 @@
 const sdk = require('node-appwrite');
 const nodemailer = require('nodemailer'); // use consistent naming
 
-const client = new sdk.Client()
-  .setEndpoint('https://cloud.appwrite.io/v1')
-  .setProject(process.env.APPWRITE_PROJECT_ID)
-  .setKey(process.env.APPWRITE_API_KEY);
 
-const storage = new sdk.Storage(client);
+
+// const storage = new sdk.Storage(client);
 const BUCKET_ID = process.env.BUCKET_ID;
 
 exports.registerUser = async (req, res) => {
-  const { email, password, name, phone } = req.body;
+  
+  const client = new sdk.Client()
+  .setEndpoint('https://cloud.appwrite.io/v1')
+  .setProject(process.env.APPWRITE_PROJECT_ID)
+  .setKey(process.env.APPWRITE_API_KEY);
+const { email, password, name, phone } = req.body;
   const users = new sdk.Users(client);
-
   try {
     const result = await users.listIdentities();
     console.log(result);
@@ -21,6 +22,14 @@ exports.registerUser = async (req, res) => {
   }
 
   try {
+    await fetch(`https://cloud.appwrite.io/v1/storage/buckets/${process.env.BUCKET_ID}/files`, {
+  method: 'GET',
+  headers: {
+    'X-Appwrite-Project': process.env.APPWRITE_PROJECT_ID,
+    'X-Appwrite-Key': process.env.APPWRITE_API_KEY,
+  }
+  
+})
     const user = await users.create(sdk.ID.unique(), email, phone, password, name);
     res.status(201).json({ user });
   } catch (error) {
