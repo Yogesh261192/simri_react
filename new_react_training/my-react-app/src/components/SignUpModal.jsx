@@ -2,8 +2,11 @@
 import React, { useState } from 'react';
 import { account,ID  } from '../appwriteConfig';
 import { useToast } from './ToastContext';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
+   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       const { showToast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
@@ -48,10 +51,10 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
         //     formData.email
         // );
         let emails= await account.createEmailPasswordSession(formData.email, formData.password);
-
-
+        
         let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
         console.log(urlDetails);
+          await account.deleteSession('current');
           const data = await response.json();
         //   const response_1 = await account.createPhoneVerification();
           if (!response.ok) {
@@ -94,9 +97,42 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
             <input name="phone" onChange={handleChange} value={formData.phone} type="tel" placeholder="Phone number" className="w-full px-4 py-2 rounded-r-lg bg-gray-50" required />
           </div>
           <textarea name="address" onChange={handleChange} value={formData.address} placeholder="Complete address" className="w-full px-4 py-2 rounded-lg bg-gray-50 resize-none h-8" required></textarea>
-          <input name="password" onChange={handleChange} value={formData.password} type="password" placeholder="Password" className="w-full px-4 py-2 rounded-lg bg-gray-50" required />
-          <input name="confirmPassword" onChange={handleChange} value={formData.confirmPassword} type="password" placeholder="Confirm password" className="w-full px-4 py-2 rounded-lg bg-gray-50" required />
-          <div className="flex items-center">
+<div className="relative">
+        <input
+          name="password"
+          onChange={handleChange}
+          value={formData.password}
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Password"
+          className="w-full px-4 py-2 rounded-lg bg-gray-50 pr-10"
+          required
+        />
+        <div
+          className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </div>
+      </div>
+
+      {/* Confirm Password Field */}
+      <div className="relative">
+        <input
+          name="confirmPassword"
+          onChange={handleChange}
+          value={formData.confirmPassword}
+          type={showConfirmPassword ? 'text' : 'password'}
+          placeholder="Confirm password"
+          className="w-full px-4 py-2 rounded-lg bg-gray-50 pr-10"
+          required
+        />
+        <div
+          className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+        >
+          {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+        </div>
+      </div>          <div className="flex items-center">
             <input type="checkbox" className="rounded text-[#2C5530]" required />
             <span className="ml-2 text-sm text-gray-600">
               I agree to the <a href="#" className="text-[#2C5530]">Terms</a> and <a href="#" className="text-[#2C5530]">Privacy Policy</a>
