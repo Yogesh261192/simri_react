@@ -47,9 +47,11 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
         //     ID.unique(),
         //     formData.email
         // );
-        await account.createEmailPasswordSession(formData.email, formData.password);
+        let emails= await account.createEmailPasswordSession(formData.email, formData.password);
 
-        await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
+
+        let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
+        console.log(urlDetails);
           const data = await response.json();
         //   const response_1 = await account.createPhoneVerification();
           if (!response.ok) {
@@ -58,7 +60,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
         //   const userId = token.userId;
         // setUserId(userId);
         // setIsOtpOpen(true);
-        showToast({message:"Please check your email for verification link", type:"success"})
+        showToast({message:"Please check your email for verification link from Appwrite", type:"success"})
         setIsSignUpOpen(false);
       
           console.log('User registered:', data);

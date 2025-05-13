@@ -12,7 +12,6 @@ import ScrollToTop from './components/ScrollToTop';
 import AllProducts from './components/AllProduct';
 import EmailVerificationPage from './components/EmailVerificationPage';
 
-
 function HomePage() {
   return (
     <>
