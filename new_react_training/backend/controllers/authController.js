@@ -15,26 +15,14 @@ exports.registerUser = async (req, res) => {
 const { email, password, name, phone } = req.body;
   const users = new sdk.Users(client);
   try {
-    const result = await users.listIdentities();
-    console.log(result);
+    // const result = await users.listIdentities();
+    // console.log(result);
+    const user = await users.create(sdk.ID.unique(), email, phone, password, name);
+    res.status(201).json({ user });
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
 
-  try {
-    await fetch(`https://cloud.appwrite.io/v1/storage/buckets/${process.env.BUCKET_ID}/files`, {
-  method: 'GET',
-  headers: {
-    'X-Appwrite-Project': process.env.APPWRITE_PROJECT_ID,
-    'X-Appwrite-Key': process.env.APPWRITE_API_KEY,
-  }
-  
-})
-    const user = await users.create(sdk.ID.unique(), email, phone, password, name);
-    res.status(201).json({ user });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
 };
 
 exports.confirmOrder = async (req, res) => {
