@@ -46,6 +46,7 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
             }),
           });
              showToast({message:"Please check your email for details", type:"error"})
+              onClose(false)
   }
 //   function handleChange(e){
 //     e.preventDefault();
