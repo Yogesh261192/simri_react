@@ -11,6 +11,7 @@ import { useUser } from './userContext';
 import UserButton from './Userinfo';
 import { account } from '../appwriteConfig';
 import { useToast } from './ToastContext';
+import OrderConfirmationModal from './OrderConfirmationModal';
 
 function Header() {
   const redirect = useRedirect();
@@ -30,6 +31,7 @@ const [isOtpOpen, setIsOtpOpen] = useState(false);
 const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
 const [userId, setUserId] = useState(null);
 const { user,setUser} = useUser();
+const [isOpen, setIsOpen]= useState(false)
 // console.log(user)
  const [formData, setFormData] = useState({
     email: '',
@@ -54,7 +56,15 @@ const { user,setUser} = useUser();
   
 
   const handleBuyNow = () => {
+    console.log(user)
+    if(user){
+      console.log("Proceeding to checkout:", cartItems);
+    // redirect('/checkout'); //
+    setIsOpen(true)
+    }
+    else{
     setIsSignInOpen(true);
+    }
   };
   async function handleSignIn(){
     try {
@@ -108,9 +118,9 @@ const { user,setUser} = useUser();
             </div>
           </div>
 
-          <button className="md:hidden text-gray-600">
+          {/* <button className="md:hidden text-gray-600">
             <i className="fas fa-bars text-xl"></i>
-          </button>
+          </button> */}
         </div>
       </header>
 
@@ -285,7 +295,7 @@ const { user,setUser} = useUser();
       {/* Sign Up Modal */}
       {isSignUpOpen && <SignUpModal setIsSignUpOpen={setIsSignUpOpen} setIsOtpOpen={setIsOtpOpen} setUserId={setUserId}/>}
 {isOtpOpen && <OtpModal setIsOtpOpen={setIsOtpOpen} otpValues={otpValues} setOtpValues={setOtpValues} userId={userId} setUser= {setUser}/>}
-
+      <OrderConfirmationModal isOpen={isOpen} onClose={setIsOpen} onConfirm={setIsOpen} ></OrderConfirmationModal>
     </>
   );
 }
