@@ -50,11 +50,12 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
         //     ID.unique(),
         //     formData.email
         // );
+        await account.deleteSession('current');
         let emails= await account.createEmailPasswordSession(formData.email, formData.password);
         
         let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
         console.log(urlDetails);
-          await account.deleteSession('current');
+          
           const data = await response.json();
         //   const response_1 = await account.createPhoneVerification();
           if (!response.ok) {
