@@ -47,7 +47,7 @@ export default function AboutUs() {
                   concerning trend: young people migrating to plains in search
                   of livelihood, leaving behind aging parents and empty homes.
                   This migration has hollowed out once-vibrant communities, with
-                  over 1,700 villages now classified as "ghost villages."
+                  over 1,700 villages now classified as <b>ghost villages</b>.
                 </p>
                 <p className="text-lg mb-8">
                   We asked ourselves a simple question: Why can not we create jobs
