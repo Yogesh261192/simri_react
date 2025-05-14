@@ -31,7 +31,7 @@ export default function EmailVerificationPage() {
         })
         .catch((err) => {
           console.error('Verification failed:', err);
-          setMessage(`❌ Email verification failed, ${error.message}`);
+          setMessage(`❌ Email verification failed, ${err.message}`);
         });
     } else {
       setMessage('Invalid verification link.');
