@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 
 export default function OurMission() {
     const [counters, setCounters] = useState({
@@ -57,6 +56,7 @@ export default function OurMission() {
             {/* Vision Banner */}
             <div className="relative h-[500px] mb-16 rounded-xl overflow-hidden">
               <Image
+              width={400} height={400}
                 src="https://readdy.ai/api/search-image?query=Breathtaking%20Uttarakhand%20mountain%20landscape%20with%20traditional%20terraced%20fields%20and%20small%20villages%2C%20dramatic%20sunrise%20lighting%20with%20golden%20rays%20illuminating%20the%20valleys%2C%20majestic%20Himalayan%20peaks%20in%20background%2C%20cinematic%20wide%20shot%20with%20vibrant%20colors&width=1400&height=500&seq=mission-banner-1&orientation=landscape"
                 alt="Uttarakhand Mountain Landscape"
                 className="w-full h-full object-cover object-top"

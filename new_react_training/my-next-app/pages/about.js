@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import rides from '../public/assets/images/village-women.jpg';
-import Image from 'next/image';
+// import Image from 'next/image';
 // import delivery_services from '../public/assets/images/delivery_services.jpg';
 
 export default function AboutUs() {
@@ -16,6 +16,7 @@ export default function AboutUs() {
                 src="https://readdy.ai/api/search-image?query=Beautiful%20panoramic%20view%20of%20remote%20Uttarakhand%20mountain%20villages%20nestled%20in%20green%20valleys%20with%20traditional%20houses%20and%20terraced%20fields%2C%20snow-capped%20Himalayan%20peaks%20in%20background%2C%20morning%20mist%2C%20dramatic%20lighting%2C%20cinematic%2C%20high%20resolution%20landscape%20photography&width=1400&height=500&seq=uttrakhand-village-1&orientation=landscape"
                 alt="Uttarakhand Village Landscape"
                 className="w-full h-full object-cover object-top"
+                width={400} height={400}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex flex-col justify-center px-16">
                 <h1 className="text-5xl font-bold text-white mb-4">
@@ -34,6 +35,7 @@ export default function AboutUs() {
                   src="https://readdy.ai/api/search-image?query=Group%20of%20Uttarakhand%20village%20women%20in%20traditional%20colorful%20attire%20working%20together%20processing%20local%20organic%20products%2C%20sorting%20herbs%20and%20spices%2C%20warm%20lighting%2C%20authentic%20setting%2C%20detailed%20expressions%20showing%20determination%20and%20pride%2C%20photojournalistic%20style&width=600&height=500&seq=mahila-mandal-1&orientation=landscape"
                   alt="Village Women Working"
                   className="w-full h-[500px] object-cover object-top rounded-xl shadow-lg"
+                  width={400} height={400}
                 />
               </div>
               <div className="md:w-1/2 flex flex-col justify-center">
@@ -127,21 +129,25 @@ export default function AboutUs() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Image
+                    width={400} height={400}
                   src="https://readdy.ai/api/search-image?query=Authentic%20Garhwali%20woman%20in%20traditional%20Uttarakhandi%20dress%20with%20pichoda%20harvesting%20red%20chilies%20and%20herbs%20in%20mountain%20terrace%20farm%2C%20snow%20peaks%20visible%2C%20morning%20golden%20light%2C%20documentary%20style%20photography&width=300&height=400&seq=uttarakhand-farmer-2&orientation=portrait"
                   alt="Local Farmer"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
                 />
                 <Image
+                    width={400} height={400}
                   src="https://readdy.ai/api/search-image?query=Elderly%20Kumaoni%20women%20in%20traditional%20Uttarakhandi%20attire%20working%20together%20sorting%20pine%20nuts%20and%20local%20spices%2C%20wearing%20traditional%20silver%20jewelry%2C%20inside%20wooden%20mountain%20home%2C%20warm%20natural%20lighting%20through%20windows&width=300&height=400&seq=uttarakhand-processing-2&orientation=portrait"
                   alt="Product Processing"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
                 />
                 <Image
+                width={400} height={400}
                   src="https://readdy.ai/api/search-image?query=Group%20of%20Pahadi%20women%20in%20colorful%20Uttarakhandi%20traditional%20dress%20packaging%20organic%20rajma%20beans%20and%20mandua%20flour%20in%20eco-friendly%20bags%2C%20working%20in%20small%20mountain%20cooperative%2C%20natural%20lighting%2C%20authentic%20setting&width=300&height=400&seq=uttarakhand-packaging-2&orientation=portrait"
                   alt="Packaging Activities"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
                 />
                 <Image
+                width={400} height={400}
                   src="https://readdy.ai/api/search-image?query=Young%20Garhwali%20person%20in%20traditional%20Uttarakhandi%20vest%20teaching%20elderly%20village%20women%20to%20use%20smartphones%20for%20digital%20payments%2C%20inside%20traditional%20mountain%20home%20with%20wooden%20architecture%2C%20warm%20lighting%20through%20windows&width=300&height=400&seq=uttarakhand-tech-2&orientation=portrait"
                   alt="Technology Training"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
