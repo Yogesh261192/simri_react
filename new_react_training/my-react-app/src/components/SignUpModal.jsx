@@ -34,6 +34,9 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
     setLoading(true);
 
     try {
+      if(account){
+        await account.deleteSession('current');
+      }
         const response = await fetch('http://simdi.in:5000/register', {
             method: 'POST',
             headers: {
@@ -50,7 +53,6 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
         //     ID.unique(),
         //     formData.email
         // );
-        await account.deleteSession('current');
         let emails= await account.createEmailPasswordSession(formData.email, formData.password);
         
         let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
