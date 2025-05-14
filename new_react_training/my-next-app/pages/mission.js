@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function OurMission() {
     const [counters, setCounters] = useState({
@@ -18,36 +19,36 @@ export default function OurMission() {
     families: 67,
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCounters((prev) => ({
-        villages:
-          prev.villages < targetCounters.villages
-            ? prev.villages + 1
-            : prev.villages,
-        women: prev.women < targetCounters.women ? prev.women + 10 : prev.women,
-        products:
-          prev.products < targetCounters.products
-            ? prev.products + 1
-            : prev.products,
-        families:
-          prev.families < targetCounters.families
-            ? prev.families + 5
-            : prev.families,
-      }));
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setCounters((prev) => ({
+//         villages:
+//           prev.villages < targetCounters.villages
+//             ? prev.villages + 1
+//             : prev.villages,
+//         women: prev.women < targetCounters.women ? prev.women + 10 : prev.women,
+//         products:
+//           prev.products < targetCounters.products
+//             ? prev.products + 1
+//             : prev.products,
+//         families:
+//           prev.families < targetCounters.families
+//             ? prev.families + 5
+//             : prev.families,
+//       }));
 
-      if (
-        counters.villages >= targetCounters.villages &&
-        counters.women >= targetCounters.women &&
-        counters.products >= targetCounters.products &&
-        counters.families >= targetCounters.families
-      ) {
-        clearInterval(interval);
-      }
-    }, 100);
+//       if (
+//         counters.villages >= targetCounters.villages &&
+//         counters.women >= targetCounters.women &&
+//         counters.products >= targetCounters.products &&
+//         counters.families >= targetCounters.families
+//       ) {
+//         clearInterval(interval);
+//       }
+//     }, 100);
 
-    return () => clearInterval(interval);
-  }, [counters]);
+//     return () => clearInterval(interval);
+//   }, [counters]);
 
   return (
     <>
@@ -55,7 +56,7 @@ export default function OurMission() {
     <div className="mission-content">
             {/* Vision Banner */}
             <div className="relative h-[500px] mb-16 rounded-xl overflow-hidden">
-              <img
+              <Image
                 src="https://readdy.ai/api/search-image?query=Breathtaking%20Uttarakhand%20mountain%20landscape%20with%20traditional%20terraced%20fields%20and%20small%20villages%2C%20dramatic%20sunrise%20lighting%20with%20golden%20rays%20illuminating%20the%20valleys%2C%20majestic%20Himalayan%20peaks%20in%20background%2C%20cinematic%20wide%20shot%20with%20vibrant%20colors&width=1400&height=500&seq=mission-banner-1&orientation=landscape"
                 alt="Uttarakhand Mountain Landscape"
                 className="w-full h-full object-cover object-top"
@@ -96,7 +97,7 @@ export default function OurMission() {
                     Technology Adoption
                   </h3>
                   <p className="text-gray-600">
-                    We're bridging the digital divide by introducing appropriate
+                    We are bridging the digital divide by introducing appropriate
                     technology that connects remote villages to global markets.
                     Our platform gives Pahadi (mountain) producers the tools to
                     compete in the modern marketplace.
@@ -108,7 +109,7 @@ export default function OurMission() {
                   </div>
                   <h3 className="text-xl font-bold mb-4">Women Empowerment</h3>
                   <p className="text-gray-600">
-                    We focus on empowering women through Mahila Mandals (Women's
+                    We focus on empowering women through Mahila Mandals (Women&apos;s
                     Collectives), providing training, resources, and market
                     access. These women are becoming economic drivers in their
                     communities, changing traditional power dynamics.
@@ -130,7 +131,7 @@ export default function OurMission() {
                   <h3 className="text-xl font-bold mb-2">Sustainable</h3>
                   <p className="text-gray-600">
                     Environmentally responsible practices that preserve
-                    Uttarakhand's pristine ecology
+                    Uttarakhand&apos;s pristine ecology
                   </p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow text-center">
@@ -215,7 +216,7 @@ export default function OurMission() {
             <div className=" bg-green-700 text-white py-16 px-8  text-center">
               <h2 className="text-3xl font-bold mb-6">Join Our Mission</h2>
               <p className="text-xl mb-8 max-w-2xl mx-auto">
-                Together, we can revitalize Uttarakhand's villages and create a
+                Together, we can revitalize Uttarakhand&apos;s villages and create a
                 model for sustainable rural development across the Himalayas.
               </p>
               <div className="flex flex-col md:flex-row justify-center gap-6 mb-8">

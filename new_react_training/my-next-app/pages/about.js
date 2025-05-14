@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import rides from '../public/assets/images/village-women.jpg';
+import Image from 'next/image';
 // import delivery_services from '../public/assets/images/delivery_services.jpg';
 
 export default function AboutUs() {
@@ -11,7 +12,7 @@ export default function AboutUs() {
       <div className="about-content">
             {/* Hero Section */}
             <div className="relative h-[500px] mb-16 rounded-xl overflow-hidden">
-              <img
+              <Image
                 src="https://readdy.ai/api/search-image?query=Beautiful%20panoramic%20view%20of%20remote%20Uttarakhand%20mountain%20villages%20nestled%20in%20green%20valleys%20with%20traditional%20houses%20and%20terraced%20fields%2C%20snow-capped%20Himalayan%20peaks%20in%20background%2C%20morning%20mist%2C%20dramatic%20lighting%2C%20cinematic%2C%20high%20resolution%20landscape%20photography&width=1400&height=500&seq=uttrakhand-village-1&orientation=landscape"
                 alt="Uttarakhand Village Landscape"
                 className="w-full h-full object-cover object-top"
@@ -29,7 +30,7 @@ export default function AboutUs() {
             {/* Our Journey Section */}
             <div className="flex flex-col md:flex-row gap-12 mb-20">
               <div className="md:w-1/2">
-                <img
+                <Image
                   src="https://readdy.ai/api/search-image?query=Group%20of%20Uttarakhand%20village%20women%20in%20traditional%20colorful%20attire%20working%20together%20processing%20local%20organic%20products%2C%20sorting%20herbs%20and%20spices%2C%20warm%20lighting%2C%20authentic%20setting%2C%20detailed%20expressions%20showing%20determination%20and%20pride%2C%20photojournalistic%20style&width=600&height=500&seq=mahila-mandal-1&orientation=landscape"
                   alt="Village Women Working"
                   className="w-full h-[500px] object-cover object-top rounded-xl shadow-lg"
@@ -47,9 +48,9 @@ export default function AboutUs() {
                   over 1,700 villages now classified as "ghost villages."
                 </p>
                 <p className="text-lg mb-8">
-                  We asked ourselves a simple question: Why can't we create jobs
+                  We asked ourselves a simple question: Why can not we create jobs
                   in the villages themselves? This question became our mission,
-                  and with the help of local <b>Mahila Mandals</b> (Women's
+                  and with the help of local <b>Mahila Mandals</b> (Women&apos;s
                   Collectives), we began cultivating, processing, and packaging
                   organic products that represent the essence of <b>Uttarakhand Pauri Garhwal</b>.
                 </p>
@@ -84,7 +85,7 @@ export default function AboutUs() {
                     Village Mahila Mandals
                   </h3>
                   <p className="text-gray-600">
-                    We partner with women's collectives in remote villages,
+                    We partner with women&apos;s collectives in remote villages,
                     providing training, resources, and market access. These
                     women are the backbone of our initiative, bringing
                     traditional knowledge and dedication to quality.
@@ -97,7 +98,7 @@ export default function AboutUs() {
                   <h3 className="text-xl font-bold mb-4">Organic Production</h3>
                   <p className="text-gray-600">
                     All our products are grown and processed without chemicals,
-                    preserving the natural purity of Uttarakhand's soil. We
+                    preserving the natural purity of Uttarakhand&apos;s soil. We
                     follow traditional farming methods that have sustained these
                     communities for generations.
                   </p>
@@ -110,7 +111,7 @@ export default function AboutUs() {
                     Technology Integration
                   </h3>
                   <p className="text-gray-600">
-                    We're bridging the digital divide by introducing technology
+                    We are bridging the digital divide by introducing technology
                     that connects remote villages to global markets. Our
                     platform gives Pahadi (mountain) producers the tools to
                     compete in the modern marketplace.
@@ -125,22 +126,22 @@ export default function AboutUs() {
                 Our Impact in Pictures
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <img
+                <Image
                   src="https://readdy.ai/api/search-image?query=Authentic%20Garhwali%20woman%20in%20traditional%20Uttarakhandi%20dress%20with%20pichoda%20harvesting%20red%20chilies%20and%20herbs%20in%20mountain%20terrace%20farm%2C%20snow%20peaks%20visible%2C%20morning%20golden%20light%2C%20documentary%20style%20photography&width=300&height=400&seq=uttarakhand-farmer-2&orientation=portrait"
                   alt="Local Farmer"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
                 />
-                <img
+                <Image
                   src="https://readdy.ai/api/search-image?query=Elderly%20Kumaoni%20women%20in%20traditional%20Uttarakhandi%20attire%20working%20together%20sorting%20pine%20nuts%20and%20local%20spices%2C%20wearing%20traditional%20silver%20jewelry%2C%20inside%20wooden%20mountain%20home%2C%20warm%20natural%20lighting%20through%20windows&width=300&height=400&seq=uttarakhand-processing-2&orientation=portrait"
                   alt="Product Processing"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
                 />
-                <img
+                <Image
                   src="https://readdy.ai/api/search-image?query=Group%20of%20Pahadi%20women%20in%20colorful%20Uttarakhandi%20traditional%20dress%20packaging%20organic%20rajma%20beans%20and%20mandua%20flour%20in%20eco-friendly%20bags%2C%20working%20in%20small%20mountain%20cooperative%2C%20natural%20lighting%2C%20authentic%20setting&width=300&height=400&seq=uttarakhand-packaging-2&orientation=portrait"
                   alt="Packaging Activities"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
                 />
-                <img
+                <Image
                   src="https://readdy.ai/api/search-image?query=Young%20Garhwali%20person%20in%20traditional%20Uttarakhandi%20vest%20teaching%20elderly%20village%20women%20to%20use%20smartphones%20for%20digital%20payments%2C%20inside%20traditional%20mountain%20home%20with%20wooden%20architecture%2C%20warm%20lighting%20through%20windows&width=300&height=400&seq=uttarakhand-tech-2&orientation=portrait"
                   alt="Technology Training"
                   className="w-full h-64 object-cover object-top rounded-lg shadow cursor-pointer hover:opacity-90 transition-opacity"
@@ -156,7 +157,7 @@ export default function AboutUs() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="flex flex-col items-center">
                   <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
-                    <img
+                    <Image
                       src="https://readdy.ai/api/search-image?query=Professional%20headshot%20of%20Indian%20woman%20in%20her%2040s%20with%20confident%20expression%2C%20simple%20background%2C%20high%20quality%20portrait%2C%20business%20attire%20with%20subtle%20traditional%20elements%2C%20warm%20lighting&width=200&height=200&seq=team-1&orientation=squarish"
                       alt="Founder"
                       className="w-full h-full object-cover"
@@ -171,7 +172,7 @@ export default function AboutUs() {
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
-                    <img
+                    <Image
                       src="https://readdy.ai/api/search-image?query=Professional%20headshot%20of%20Indian%20man%20in%20his%2050s%20with%20kind%20eyes%20and%20gentle%20smile%2C%20simple%20background%2C%20high%20quality%20portrait%2C%20casual%20professional%20attire%2C%20warm%20lighting&width=200&height=200&seq=team-2&orientation=squarish"
                       alt="Co-Founder"
                       className="w-full h-full object-cover"
@@ -185,7 +186,7 @@ export default function AboutUs() {
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
-                    <img
+                    <Image
                       src="https://readdy.ai/api/search-image?query=Professional%20headshot%20of%20young%20Indian%20woman%20in%20her%2030s%20with%20bright%20smile%2C%20simple%20background%2C%20high%20quality%20portrait%2C%20smart%20casual%20attire%2C%20warm%20lighting&width=200&height=200&seq=team-3&orientation=squarish"
                       alt="Community Manager"
                       className="w-full h-full object-cover"
@@ -199,7 +200,7 @@ export default function AboutUs() {
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="w-40 h-40 rounded-full overflow-hidden mb-4">
-                    <img
+                    <Image
                       src="https://readdy.ai/api/search-image?query=Professional%20headshot%20of%20young%20Indian%20man%20in%20his%2020s%20with%20tech-savvy%20appearance%2C%20simple%20background%2C%20high%20quality%20portrait%2C%20casual%20modern%20attire%2C%20warm%20lighting&width=200&height=200&seq=team-4&orientation=squarish"
                       alt="Tech Lead"
                       className="w-full h-full object-cover"
@@ -208,7 +209,7 @@ export default function AboutUs() {
                   <h3 className="text-xl font-bold">Vikram Negi</h3>
                   <p className="text-gray-600">Technology Lead</p>
                   <p className="text-center text-gray-500 mt-2">
-                    Returned to his village after working in Bangalore's tech
+                    Returned to his village after working in Bangalore&apos;s tech
                     sector
                   </p>
                 </div>

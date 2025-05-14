@@ -9,6 +9,8 @@ import Footer from '../components/footer';
 import { useCart } from '../components/CartContext';
 import Head from 'next/head';
 import Products from '../components/products';
+import Image from 'next/image';
+
 
 
 export default function AllProducts(params) {
@@ -110,7 +112,7 @@ export default function AllProducts(params) {
                 <div key={item.$id} className="bg-white rounded-xl overflow-hidden shadow-md transition-transform hover:-translate-y-2">
                   <div className="h-48 overflow-hidden">
                     {filteredImage ? (
-                      <img
+                      <Image
                         src={`https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${filteredImage.$id}/view?project=673ebe09000b35b67d8b&mode=admin`}
                         alt={item.name}
                         className="w-full h-full object-cover object-top"
