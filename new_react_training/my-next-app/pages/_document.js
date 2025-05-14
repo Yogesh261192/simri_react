@@ -13,6 +13,9 @@ export default function Document() {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
+                  <title>SIMDI</title>
+          <meta name="description" content="E-commerce for Himalayas and ride facility for driving and NGO" />
+
       </Head>
       <body>
         <Main />
