@@ -4,8 +4,11 @@ import { account,ID  } from '../appwriteConfig';
 import { useToast } from './ToastContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
+import { useUser } from './userContext';
+
 const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
    const [showPassword, setShowPassword] = useState(false);
+    const { setUser } = useUser();
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       const { showToast } = useToast();
   const [formData, setFormData] = useState({
@@ -34,14 +37,6 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
     setLoading(true);
 
     try {
-      if(account){
-        try {
-           await account.deleteSession('current');
-        } catch (error) {
-          console.log(error)
-        }
-       
-      }
         const response = await fetch('http://simdi.in:5000/register', {
             method: 'POST',
             headers: {
@@ -54,30 +49,21 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
               phone: `+91${formData.phone}`, // Include country code if needed
             }),
           });
-        //   const token = await account.createEmailToken(
-        //     ID.unique(),
-        //     formData.email
-        // );
-        let emails= await account.createEmailPasswordSession(formData.email, formData.password);
-        
+        await account.createEmailPasswordSession(formData.email, formData.password);
+        const user = await account.get(); 
+        setUser(user)
+
         let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
         console.log(urlDetails);
           
           const data = await response.json();
-        //   const response_1 = await account.createPhoneVerification();
           if (!response.ok) {
             throw new Error(data.error || 'Registration failed');
           }
-        //   const userId = token.userId;
-        // setUserId(userId);
-        // setIsOtpOpen(true);
-        showToast({message:"Please check your email for verification link from Appwrite", type:"success"})
+        
+        showToast({message:"Sign Up success you are logged in. Please check your email for verification link from Appwrite", type:"success"})
         setIsSignUpOpen(false);
-      
-          console.log('User registered:', data);
-    } catch (error) {
-      console.error(error);
-    //   alert(error.message || "Failed to register.");
+          } catch (error) {
     showToast({message:error.message, type:"error"})
     } finally {
       setLoading(false);
