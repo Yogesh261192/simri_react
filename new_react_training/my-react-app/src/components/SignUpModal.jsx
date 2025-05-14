@@ -35,7 +35,12 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
 
     try {
       if(account){
-        await account.deleteSession('current');
+        try {
+           await account.deleteSession('current');
+        } catch (error) {
+          console.log(error)
+        }
+       
       }
         const response = await fetch('http://simdi.in:5000/register', {
             method: 'POST',
