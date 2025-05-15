@@ -10,8 +10,15 @@ dotenv.config();
 
 const authRoutes = require('./routes/auth');
 const { registerUser, confirmOrder } = require('./controllers/authController');
+const corsOptions = {
+  origin: ['https://simdi.in', 'https://www.simdi.in'],
+  credentials: true,
+};
 
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+// app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

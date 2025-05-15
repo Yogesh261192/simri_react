@@ -1,6 +1,7 @@
 const sdk = require('node-appwrite');
 const nodemailer = require('nodemailer'); // use consistent naming
 
+const fetch = require('node-fetch');
 
 
 // const storage = new sdk.Storage(client);
@@ -26,46 +27,49 @@ const { email, password, name, phone } = req.body;
 };
 
 exports.confirmOrder = async (req, res) => {
+  // ✅ Handle CORS preflight (important for browsers)
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   try {
     const { email, total_amount, items } = req.body;
 
     console.log("Using Appwrite Project ID:", process.env.APPWRITE_PROJECT_ID);
     console.log("Using Appwrite API Key:", process.env.APPWRITE_API_KEY);
 
-    // Check required Appwrite env vars
     if (!process.env.APPWRITE_PROJECT_ID || !process.env.APPWRITE_API_KEY || !process.env.BUCKET_ID) {
       return res.status(500).json({ error: 'Appwrite configuration missing' });
     }
 
     let filesResponse;
+
     try {
-       await fetch(`https://cloud.appwrite.io/v1/storage/buckets/${process.env.BUCKET_ID}/files`, {
-  method: 'GET',
-  headers: {
-    'X-Appwrite-Project': process.env.APPWRITE_PROJECT_ID,
-    'X-Appwrite-Key': process.env.APPWRITE_API_KEY,
-  }
-  
-}).then(res=>res.json()).then(response=>{
-  filesResponse=response
-})
-// console.log(filesResponse);
+      const fileFetch = await fetch(
+        `https://cloud.appwrite.io/v1/storage/buckets/${process.env.BUCKET_ID}/files`,
+        {
+          method: 'GET',
+          headers: {
+            'X-Appwrite-Project': process.env.APPWRITE_PROJECT_ID,
+            'X-Appwrite-Key': process.env.APPWRITE_API_KEY,
+          }
+        }
+      );
+      filesResponse = await fileFetch.json();
     } catch (error) {
       console.error("Appwrite file listing failed:", error);
       return res.status(500).json({ error: 'Failed to fetch files from Appwrite' });
     }
-    console.log(filesResponse)
-    const files = filesResponse.files;
-    // const response = await storage.getBucket(process.env.BUCKET_ID);
-    // console.log(response)
+
+    const files = filesResponse.files || [];
+
     const itemsWithImageUrls = items.map(item => {
-      const match = files.filter(file =>
+      const match = files.find(file =>
         file.name.toLowerCase().includes(item.name.toLowerCase())
       );
-      // console.log(match)
 
       const imageUrl = match
-        ? `https://fra.cloud.appwrite.io/v1/storage/buckets/${process.env.BUCKET_ID}/files/${match[0].$id}/view?project=${process.env.APPWRITE_PROJECT_ID}&mode=admin`
+        ? `https://fra.cloud.appwrite.io/v1/storage/buckets/${process.env.BUCKET_ID}/files/${match.$id}/view?project=${process.env.APPWRITE_PROJECT_ID}&mode=admin`
         : null;
 
       return {
@@ -99,13 +103,12 @@ exports.confirmOrder = async (req, res) => {
             `).join('')}
           </tbody>
         </table>
-        <h3 style="text-align: right; margin-top: 20px;">Total:${total_amount}</h3>
+        <h3 style="text-align: right; margin-top: 20px;">Total: $${total_amount}</h3>
         <p style="margin-top: 40px;">We hope you enjoy your purchase!</p>
         <p style="color: #555;">Best regards,<br/>SIMDI</p>
       </div>
     `;
 
-    // Nodemailer setup
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -122,6 +125,7 @@ exports.confirmOrder = async (req, res) => {
     });
 
     res.status(200).json({ message: 'Email sent successfully' });
+
   } catch (error) {
     console.error('Email send failed:', error);
     res.status(500).json({ error: 'Something went wrong while sending email' });
