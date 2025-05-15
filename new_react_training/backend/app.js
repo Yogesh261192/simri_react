@@ -1,23 +1,33 @@
 const dotenv = require('dotenv');
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-let {registerUser, confirmOrder}= require('./controllers/authController');
-// console.log(dotenv)
+const { registerUser, confirmOrder } = require('./controllers/authController');
 
-
+// Load env vars
 dotenv.config();
-const app = express();
-// console.log(process.env)
-const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const app = express();
+
+// SSL certificate options
+const options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/simdi.in/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/simdi.in/fullchain.pem'),
+};
+
+// Middleware
+app.use(cors({ origin: 'https://simdi.in', credentials: true }));
 app.use(express.json());
 
+// Routes
 app.use('/api/auth', authRoutes);
 app.post('/register', registerUser);
 app.post('/confirm_order', confirmOrder);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start HTTPS server
+const PORT = process.env.PORT || 443;
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`HTTPS Server is running on port ${PORT}`);
 });

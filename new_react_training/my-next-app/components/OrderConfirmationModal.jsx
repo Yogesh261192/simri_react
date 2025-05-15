@@ -35,7 +35,7 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
     }
      const user = await account.get(); // fetch user details
          console.log(user)
-       let response = await fetch("https://simdi.in:5000/confirm_order", {
+       let response = await fetch("https://simdi.in/confirm_order", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // 🔥 This is essential
