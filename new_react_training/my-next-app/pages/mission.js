@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/footer";
 import { useState, useEffect } from 'react';
 
+
 export default function OurMission() {
     const [counters, setCounters] = useState({
     villages: 0,
@@ -51,6 +52,7 @@ export default function OurMission() {
 
   return (
     <>
+    
     <Header></Header>
     <div className="mission-content">
             {/* Vision Banner */}

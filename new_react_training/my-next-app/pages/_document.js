@@ -12,8 +12,21 @@ export default function Document() {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-        {/* Note: Don't include <title> here */}
-        <meta name="description" content="E-commerce for Himalayas and ride facility for driving and NGO" />
+        {/* Google Analytics (Gtag) */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-VR52MJC4YQ"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-VR52MJC4YQ');
+            `,
+          }}
+        />
       </Head>
       <body>
         <Main />
