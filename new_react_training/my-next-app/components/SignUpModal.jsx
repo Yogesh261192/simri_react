@@ -41,7 +41,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
       let res= await account.create('unique()', formData.email, formData.password, formData.name);
       const data = await res.json();
       console.log(data)
-      if (!res.ok) {
+      if (!data.ok) {
         throw new Error(data.error || 'Registration failed');
       }
 
