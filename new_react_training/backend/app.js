@@ -27,7 +27,7 @@ app.post('/register', registerUser);
 app.post('/confirm_order', confirmOrder);
 
 // Start HTTPS server
-const PORT = process.env.PORT || 443;
+const PORT =  443;
 https.createServer(options, app).listen(PORT, () => {
   console.log(`HTTPS Server is running on port ${PORT}`);
 });
