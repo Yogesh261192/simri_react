@@ -31,14 +31,14 @@ app.use(cors(corsOptions));
 
 // Handle preflight requests
 // app.options('*', cors(corsOptions));
-
+app.options('/confirm_order', cors()) 
 // Parse JSON request bodies
 app.use(express.json());
 
 // API routes
 app.use('/api/auth', authRoutes);
 app.post('/register', registerUser);
-app.post('/confirm_order', confirmOrder);
+app.post('/confirm_order',cors(), confirmOrder);
 
 // Start server
 const PORT = process.env.PORT || 5000;
