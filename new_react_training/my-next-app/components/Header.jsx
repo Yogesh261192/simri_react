@@ -281,7 +281,8 @@ const [isOpen, setIsOpen]= useState(false)
               <p className="text-center text-sm text-gray-600 mt-6">
                 Don't have an account?{" "}
                 <a href="#" className="text-[#2C5530] hover:text-[#2C5530]/80 font-medium"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
                   setIsSignInOpen(false);
                   setIsSignUpOpen(true);
                   }}>
