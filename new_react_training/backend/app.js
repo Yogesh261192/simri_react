@@ -10,13 +10,21 @@ dotenv.config();
 
 const authRoutes = require('./routes/auth');
 const { registerUser, confirmOrder } = require('./controllers/authController');
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-};
+const allowedOrigins = ['https://simdi.in', 'https://www.simdi.in'];
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like curl or mobile apps)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+// app.options('*', cors(corsOptions));
 
 // app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
