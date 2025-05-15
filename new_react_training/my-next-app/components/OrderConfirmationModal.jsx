@@ -35,7 +35,7 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
     }
      const user = await account.get(); // fetch user details
          console.log(user)
-       let response = await fetch("/api/confirm_order", {
+       let response = await fetch("http://simdi.in:5000/confirm_order", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // 🔥 This is essential
@@ -46,8 +46,9 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
               items:cartItems
             })
       });
-             showToast({message:"Please check your email for details", type:"success"})
-              onClose(false)
+      console.log(response, 'response')
+            //  showToast({message:"Please check your email for details", type:"success"})
+            //   onClose(false)
   }
 //   function handleChange(e){
 //     e.preventDefault();

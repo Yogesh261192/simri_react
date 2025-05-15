@@ -38,18 +38,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
 
     try {
 
-      let res = await fetch("/api/register", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // 🔥 This is essential
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          name: formData.name,
-          phone: `+91${formData.phone}`,
-        })
-      });
+      await account.create('unique()', formData.email, formData.password, formData.name);
       const data = await res.json();
       console.log(data)
       if (!res.ok) {
@@ -62,7 +51,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
 
       let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
       console.log(urlDetails);
-      showToast({ message: "Sign Up success you are logged in. Please check your email for verification link from Appwrite", type: "success" })
+      showToast({ message: "Sign Up success you are logged in. Please check your email for verification link", type: "success" })
       // setIsSignUpOpen(false);
     } catch (error) {
       let err= error.message=="A user with the same id, email, or phone already exists in this project."? "User already registered":error.message
