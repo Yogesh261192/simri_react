@@ -37,7 +37,9 @@ app.use(express.json());
 // API routes
 app.use('/api/auth', authRoutes);
 app.post('/register', registerUser);
-app.post('/confirm_order', confirmOrder);
+app.post('/confirm_order', (req,res)=>{
+  console.lod(req.body)
+});
 
 // Start server
 const PORT = process.env.PORT || 5000;
