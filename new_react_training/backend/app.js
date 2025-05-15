@@ -30,7 +30,7 @@ const app = express();
 app.use(cors(corsOptions));
 
 // Handle preflight requests
-app.options('*', cors(corsOptions));
+// app.options('*', cors(corsOptions));
 
 // Parse JSON request bodies
 app.use(express.json());
