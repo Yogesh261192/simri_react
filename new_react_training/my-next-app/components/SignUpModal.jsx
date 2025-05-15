@@ -38,7 +38,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
 
     try {
 
-      await account.create('unique()', formData.email, formData.password, formData.name);
+      let res= await account.create('unique()', formData.email, formData.password, formData.name);
       const data = await res.json();
       console.log(data)
       if (!res.ok) {
