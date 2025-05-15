@@ -39,11 +39,12 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
     try {
 
       let res= await account.create('unique()', formData.email, formData.password, formData.name);
-      const data = await res.json();
-      console.log(data)
-      if (!data.ok) {
-        throw new Error(data.error || 'Registration failed');
-      }
+      // const data = await res.json();
+      console.log(res)
+      // console.log(data)
+      // if (!data.ok) {
+      //   throw new Error(data.error || 'Registration failed');
+      // }
 
       await account.createEmailPasswordSession(formData.email, formData.password);
       const user = await account.get(); 
@@ -52,7 +53,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
       let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
       console.log(urlDetails);
       showToast({ message: "Sign Up success you are logged in. Please check your email for verification link", type: "success" })
-      // setIsSignUpOpen(false);
+      setIsSignUpOpen(false);
     } catch (error) {
       let err= error.message=="A user with the same id, email, or phone already exists in this project."? "User already registered":error.message
       showToast({ message: err, type: "error" })
