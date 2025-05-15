@@ -13,6 +13,7 @@ const allowedOrigins = ['https://simdi.in', 'https://www.simdi.in'];
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (e.g., mobile apps, curl)
+    console.log(origin, 'origin')
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -37,9 +38,7 @@ app.use(express.json());
 // API routes
 app.use('/api/auth', authRoutes);
 app.post('/register', registerUser);
-app.post('/confirm_order', (req,res)=>{
-  console.lod(req.body)
-});
+app.post('/confirm_order', confirmOrder);
 
 // Start server
 const PORT = process.env.PORT || 5000;
