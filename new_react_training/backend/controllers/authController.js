@@ -248,7 +248,7 @@ function getRideConfirmationEmail( userName, rideDate, pickupLocation, dropLocat
         <p>The image below shows your ride pickup and drop:</p>
         <img src="${mapImageData}" alt="Map Snapshot" style="width: 100%; border: 1px solid #ccc; border-radius: 8px;" />
 
-        <p style="margin-top: 30px;">We look forward to serving you. If you have any questions or need to modify your booking, feel free to contact our support team.</p>
+        <p style="margin-top: 30px;">We look forward to serving you. If you have any questions or need to modify your booking, feel free to contact our support team at team@simdi.in.</p>
 
         <p>Best regards,<br><strong>Team SIMDI</strong></p>
       </div>
@@ -272,7 +272,7 @@ function getDeliveryConfirmationEmail( userName, rideDate, pickupLocation, dropL
 
         <p>Hello ${userName},</p>
 
-        <p>Thank you for booking your ride with us! Here are the details of your ride:</p>
+        <p>Thank you for booking with us! Here are the details of your delivery:</p>
 
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
@@ -297,7 +297,9 @@ function getDeliveryConfirmationEmail( userName, rideDate, pickupLocation, dropL
         <p>The image below shows your ride pickup and drop:</p>
         <img src="${mapImageData}" alt="Map Snapshot" style="width: 100%; border: 1px solid #ccc; border-radius: 8px;" />
 
-        <p style="margin-top: 30px;">We look forward to serving you. If you have any questions or need to modify your booking, feel free to contact our support team.</p>
+        <p style="margin-top: 30px;">We look forward to serving you. If you have any questions or need to modify your booking, feel free to contact our support team. 
+        at team@simdi.in
+        </p>
 
         <p>Best regards,<br><strong>Team SIMDI</strong></p>
       </div>
