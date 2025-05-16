@@ -2,6 +2,15 @@ const sdk = require('node-appwrite');
 const nodemailer = require('nodemailer'); // use consistent naming
 
 const fetch = require('node-fetch');
+const transporter = nodemailer.createTransport({
+  host: "smtp.zoho.in",
+  port: 465,
+  secure: true, // true for port 465, false for port 587
+  auth: {
+    user: "no-reply@simdi.in", // your new email
+    pass: process.env.SMTP_PASSWORD, // app-specific password or your email password
+  },
+});
 
 
 // const storage = new sdk.Storage(client);
@@ -34,9 +43,8 @@ exports.confirmOrder = async (req, res) => {
 
   try {
     const { email, total_amount, items,details } = req.body;
-
-    console.log("Using Appwrite Project ID:", process.env.APPWRITE_PROJECT_ID);
-    console.log("Using Appwrite API Key:", process.env.APPWRITE_API_KEY);
+    // console.log("Using Appwrite Project ID:", process.env.APPWRITE_PROJECT_ID);
+    // console.log("Using Appwrite API Key:", process.env.APPWRITE_API_KEY);
 
     if (!process.env.APPWRITE_PROJECT_ID || !process.env.APPWRITE_API_KEY || !process.env.BUCKET_ID) {
       return res.status(500).json({ error: 'Appwrite configuration missing' });
@@ -116,15 +124,7 @@ exports.confirmOrder = async (req, res) => {
     //     pass: process.env.SMTP_PASSWORD
     //   }
     // });
-    const transporter = nodemailer.createTransport({
-  host: "smtp.zoho.in",
-  port: 465,
-  secure: true, // true for port 465, false for port 587
-  auth: {
-    user: "no-reply@simdi.in", // your new email
-    pass: process.env.SMTP_PASSWORD, // app-specific password or your email password
-  },
-});
+    
      const detailsEmail = html + `
   <table width="100%" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-top: 20px;">
     <thead>
@@ -168,3 +168,141 @@ exports.confirmOrder = async (req, res) => {
     res.status(500).json({ error: 'Something went wrong while sending email' });
   }
 };
+
+exports.confirmBooking= async (req, res)=>{
+ 
+   const { userName, rideDate, pickup, dropoff, staticMapUrl,email }= req.body;
+  //  console.log(req.body)
+    // res.status(200).json({ message: 'Please check email for booking info' });
+    // console.log(userName, rideDate, pickup, dropoff, mapImage)
+let html= getRideConfirmationEmail(userName, rideDate, pickup, dropoff, staticMapUrl );
+  try {
+    await transporter.sendMail({
+     from: 'SIMDI <no-reply@simdi.in>',
+      to: email,
+      cc:"yogeshmamgain2611@gmail.com",
+      subject: 'Your Ride Confirmation',
+      
+      html
+    });
+    res.status(200).json({ message: 'Please check email for booking info' });
+  } catch (error) {
+    console.log(error)
+        res.status(500).json({ error: 'Something went wrong while sending email' });
+  }
+
+}
+
+exports.confirmDilevery= async (req,res)=>{
+  const { userName, rideDate, pickup, dropoff, staticMapUrl,weight,email }= req.body;
+  let html= getDeliveryConfirmationEmail( userName, rideDate, pickup, dropoff, staticMapUrl,weight )
+try {
+    await transporter.sendMail({
+     from: 'SIMDI <no-reply@simdi.in>',
+      to: email,
+      cc:"yogeshmamgain2611@gmail.com",
+      subject: 'Your Delivery Confirmation',
+      html
+    });
+    res.status(200).json({ message: 'Please check email for delivery info' });
+  } catch (error) {
+    console.log(error)
+        res.status(500).json({ error: 'Something went wrong while sending email' });
+  }
+
+}
+
+function getRideConfirmationEmail( userName, rideDate, pickupLocation, dropLocation, mapImageData ) {
+  console.log(userName,rideDate,pickupLocation, dropLocation)
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8" />
+      <title>Ride Booking Confirmation</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <div style="max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px;">
+        <h2 style="color: #007bff;">🚖 Ride Booking Confirmed!</h2>
+
+        <p>Hello ${userName},</p>
+
+        <p>Thank you for booking your ride with us! Here are the details of your ride:</p>
+
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0;"><strong>📅 Ride Date:</strong></td>
+            <td style="padding: 8px 0;">${rideDate}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0;"><strong>📍 Pickup Location:</strong></td>
+            <td style="padding: 8px 0;">${pickupLocation}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0;"><strong>📍 Drop Location:</strong></td>
+            <td style="padding: 8px 0;">${dropLocation}</td>
+          </tr>
+        </table>
+
+        <h3 style="margin-top: 30px;">🗺️ Your Route Map</h3>
+        <p>The image below shows your ride pickup and drop:</p>
+        <img src="${mapImageData}" alt="Map Snapshot" style="width: 100%; border: 1px solid #ccc; border-radius: 8px;" />
+
+        <p style="margin-top: 30px;">We look forward to serving you. If you have any questions or need to modify your booking, feel free to contact our support team.</p>
+
+        <p>Best regards,<br><strong>Team SIMDI</strong></p>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+function getDeliveryConfirmationEmail( userName, rideDate, pickupLocation, dropLocation, mapImageData,weight ) {
+  console.log(userName,rideDate,pickupLocation, dropLocation)
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8" />
+      <title>Delivery Confirmation</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <div style="max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px;">
+        <h2 style="color: #007bff;">📦 Delivery Confirmed!</h2>
+
+        <p>Hello ${userName},</p>
+
+        <p>Thank you for booking your ride with us! Here are the details of your ride:</p>
+
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0;"><strong>📅 Pickup Date:</strong></td>
+            <td style="padding: 8px 0;">${rideDate}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0;"><strong>📍 Pickup Location:</strong></td>
+            <td style="padding: 8px 0;">${pickupLocation}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0;"><strong>📍 Drop Location:</strong></td>
+            <td style="padding: 8px 0;">${dropLocation}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0;"><strong>📦  Weight:</strong></td>
+            <td style="padding: 8px 0;">${weight}Kg</td>
+          </tr>
+        </table>
+
+        <h3 style="margin-top: 30px;">🗺️ Your Delivery Map</h3>
+        <p>The image below shows your ride pickup and drop:</p>
+        <img src="${mapImageData}" alt="Map Snapshot" style="width: 100%; border: 1px solid #ccc; border-radius: 8px;" />
+
+        <p style="margin-top: 30px;">We look forward to serving you. If you have any questions or need to modify your booking, feel free to contact our support team.</p>
+
+        <p>Best regards,<br><strong>Team SIMDI</strong></p>
+      </div>
+    </body>
+    </html>
+  `;
+}
+

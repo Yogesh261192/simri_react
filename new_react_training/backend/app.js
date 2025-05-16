@@ -4,12 +4,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const authRoutes = require('./routes/auth');
-const { registerUser, confirmOrder } = require('./controllers/authController');
+const { registerUser, confirmOrder , confirmBooking, confirmDilevery} = require('./controllers/authController');
 
 const app = express();
 
 // Define allowed origins
-const allowedOrigins = ['https://simdi.in', 'https://www.simdi.in'];
+const allowedOrigins = ['https://simdi.in', 'https://www.simdi.in', 'http://localhost:3001'];
 
 // CORS configuration
 const corsOptions = {
@@ -39,6 +39,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.post('/register', registerUser);
 app.post('/confirm_order', confirmOrder);
+app.post('/confirm_booking', confirmBooking);
+app.post('/confirm_delivery', confirmDilevery)
 
 // Start server
 const PORT = process.env.PORT || 5000;

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { account } from "../appwriteConfig";
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import DriverList from "../components/Driver";
 import Head from "next/head";
-// import { handleRedirect } from "./Common";
+// import { useToast } from './ToastContext';
+import { useToast } from "../components/ToastContext";
 import {
   GoogleMap,
   LoadScript,
@@ -11,21 +13,14 @@ import {
   Marker,
 } from "@react-google-maps/api";
 import PlaceInput from "../components/PlaceInput";
+import html2canvas from "html2canvas";
 
-const defaultCenter = {
-  lat: 28.6139,
-  lng: 77.209,
-};
-
-const containerStyle = {
-  width: "100%",
-  height: "400px",
-};
-
+const defaultCenter = { lat: 28.6139, lng: 77.209 };
+const containerStyle = { width: "100%", height: "400px" };
 const libraries = ["places"];
 
-
 export default function Rides() {
+    const { showToast } = useToast();
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [directions, setDirections] = useState(null);
@@ -33,31 +28,26 @@ export default function Rides() {
   const [dropoffLatLng, setDropoffLatLng] = useState(null);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
-  const [currentScreen, setCurrentScreen]= useState('ride');
-  const [currentText, setCurrentText]= useState("Book Now")
+  const [currentScreen, setCurrentScreen] = useState("ride");
+  const [currentText, setCurrentText] = useState("Book Now");
+  const [rideDate, setRideDate] = useState("");
+  const [rideTime, setRideTime] = useState("");
+  const [weight, setWeight ]= useState("")
 
-  const autocompleteService = useRef(null);
-  
- 
-
-
-  useEffect(() => {
-    if (!window.google) return;
-    // autocompleteService.current =
-    //   new window.google.maps.places.AutocompleteService();
-  }, []);
-  function handleCurrentChange(param){
-        setCurrentScreen(param);
-        if(param=="rides"){
-            setCurrentText("Book Now")
-        }
-        else{
-            setCurrentText("Deliver Now")
-        }
-
+  const mapRef = useRef(null);
+  function clearData(){
+    setPickup("");
+    setDropoff("");
+    setDirections("");
+    setDistance("");
+    setPickupLatLng("")
+    setRideDate("");
+    setWeight("");
+    setRideTime("");
+    setDropoffLatLng("");
+    setDuration("");
   }
 
-  // Geocode place names into coordinates
   const geocodePlace = (address, setter) => {
     const geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({ address }, (results, status) => {
@@ -79,7 +69,6 @@ export default function Rides() {
   useEffect(() => {
     if (pickupLatLng && dropoffLatLng && window.google) {
       const service = new window.google.maps.DirectionsService();
-  
       service.route(
         {
           origin: pickupLatLng,
@@ -99,159 +88,214 @@ export default function Rides() {
       );
     }
   }, [pickupLatLng, dropoffLatLng]);
+  
+
+  const handleBooking = async () => {
+      const user = await account.get(); // fetch user details
+         console.log(user)
+    if(currentScreen=="ride"){
+      if (!pickup || !dropoff || !rideDate || !rideTime) {
+      showToast({message:"Please fill in pickup, dropoff, date, and time.", type:"error"});
+      return;
+    }
+
+    const mapElement = mapRef.current;
+    const canvas = await html2canvas(mapElement);
+    const imageData = canvas.toDataURL("image/png");
+const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
+    
+    const formData = {
+      pickup,
+      dropoff,
+      rideDate,
+      rideTime,
+      staticMapUrl,
+      distance,
+      duration,
+      userName: user.name,
+      email: user.email
+    };
+    
+
+    try {
+      const res = await fetch("https://simdi.in/confirm_booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showToast({message:"Booking confirmed, please check email for more info", type:"success"});
+        clearData()
+      } else {
+        showToast({message:"Booking failed", type:"error"});
+        clearData()
+
+      }
+    } catch (err) {
+      showToast({message:err, type:"error"});
+      clearData()
+      console.error("Error sending booking:", err);
+    }
+    }
+    else{
+       if (!pickup || !dropoff || !rideDate || !rideTime || !weight) {
+      showToast({message:"Please fill in pickup, dropoff,weight, date, and time.", type:"error"});
+      return;
+    }
+    const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
+
+    const formData = {
+      pickup,
+      dropoff,
+      rideDate,
+      rideTime,
+      staticMapUrl,
+      weight,
+      userName: user.name,
+      email: user.email
+    };
+     try {
+      const res = await fetch(" https://simdi.in/confirm_delivery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (res.ok) {
+     showToast({message:"Booking confirmed, please check email for more info", type:"success"});
+        clearData()
+      } else {
+         showToast({message:"Booking failed", type:"error"});
+        clearData()
+      }
+    } catch (err) {
+      showToast({message:err, type:"error"});
+      clearData()
+      console.error("Error sending booking:", err);
+    }
+
+    }
+  };
+
+  const handleCurrentChange = (param) => {
+    setCurrentScreen(param);
+    setCurrentText(param === "ride" ? "Book Now" : "Deliver Now");
+  };
 
   return (
     <>
       <Head>
         <title>Rides</title>
-        <meta name="description" content="pahadi and uttrakhand products as well as cab booking for char dham and all desitanation in himachal and uttrakhand" />
-        <meta name="keywords" content="kedarnath, rides, cab, driver, badrinath,gangotri,
-        yamunotri, char, dham, yatra, comfortable, safe" />
-        <meta name="author" content="yogesh mamgain" />
-        <link rel="canonical" href="http://simdi.in" />
-        {/* Open Graph / Facebook */}
-        <meta property="og:title" content="SIMDI" />
-        <meta property="og:description" content="simdi." />
-        <meta property="og:url" content="http://simdi.in" />
-        <meta property="og:type" content="website" />
-        {/* Twitter */}
-        {/* <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Your Page Title" />
-        <meta name="twitter:description" content="Your social media preview text." /> */}
+        <meta name="description" content="Book ride or delivery in Uttarakhand" />
       </Head>
-    <main>
-      <Header></Header>
-   
-    <section className="py-20 bg-[#F5F7F6]">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Book a Ride or Delivery
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Fast, reliable transportation and delivery services connecting
-            Himalayan communities
-          </p>
-        </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
-          <button
-  className={`!rounded-button whitespace-nowrap cursor-pointer flex-1 py-3 px-4 rounded-lg text-center font-medium ${
-    currentScreen === 'ride' ? 'bg-[#4A90A0] text-white' : 'bg-[#F5F7F6] text-gray-700 hover:bg-gray-200'
-  }`}
-  onClick={() => setCurrentScreen('ride')}
->
-  <i className="fas fa-car mr-2"></i> Ride
-</button>
-
-            <button
-  className={`!rounded-button whitespace-nowrap cursor-pointer flex-1 py-3 px-4 rounded-lg text-center font-medium ${
-    currentScreen === 'delivery' ? 'bg-[#4A90A0] text-white' : 'bg-[#F5F7F6] text-gray-700 hover:bg-gray-200'
-  }`}
-  onClick={() => handleCurrentChange('delivery')}
->
-  <i className="fas fa-box mr-2"></i> Delivery
-</button>
-          </div>
-
-          <LoadScript
-            googleMapsApiKey="AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM"
-            libraries={libraries}
-          >
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={pickupLatLng || defaultCenter}
-              zoom={12}
-            >
-              {pickupLatLng && (
-                <Marker
-                  position={pickupLatLng}
-                  icon={{
-                    url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-                  }}
-                />
-              )}
-              {dropoffLatLng && (
-                <Marker
-                  position={dropoffLatLng}
-                  icon={{
-                    url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                  }}
-                />
-              )}
-              {directions && <DirectionsRenderer directions={directions} options={{ suppressMarkers: true }} />}
-            </GoogleMap>
-          </LoadScript>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 mt-2">
-            <PlaceInput
-              label="Pickup Location"
-              placeholder="Enter pickup location"
-              value={pickup}
-              setValue={setPickup}
-            />
-
-            <PlaceInput
-              label="Dropoff Location"
-              placeholder="Enter drop location"
-              value={dropoff}
-              setValue={setDropoff}
-            />
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Date
-              </label>
-              <div className="relative">
-                <input
-                  type="date"
-                  className="w-full py-3 pl-10 pr-4 rounded-lg bg-[#F5F7F6] border-none text-sm focus:outline-none focus:ring-2 focus:ring-[#4A90A0]/30"
-                  defaultValue="2025-05-08"
-                />
-                <i className="fas fa-calendar absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-              </div>
+      <main>
+        <Header />
+        <section className="py-20 bg-[#F5F7F6]">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                Book a Ride or Delivery
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Fast, reliable transportation and delivery services connecting Himalayan communities
+              </p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Time
-              </label>
-              <div className="relative">
-                <input
-                  type="time"
-                  className="w-full py-3 pl-10 pr-4 rounded-lg bg-[#F5F7F6] border-none text-sm focus:outline-none focus:ring-2 focus:ring-[#4A90A0]/30"
-                  defaultValue="10:00"
-                />
-                <i className="fas fa-clock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+              {/* Buttons */}
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
+                <button
+                  className={`flex-1 py-3 px-4 rounded-lg font-medium ${currentScreen === 'ride' ? 'bg-[#4A90A0] text-white' : 'bg-gray-100 text-gray-700'}`}
+                  onClick={() => handleCurrentChange('ride')}
+                >
+                  🚗 Ride
+                </button>
+                <button
+                  className={`flex-1 py-3 px-4 rounded-lg font-medium ${currentScreen === 'delivery' ? 'bg-[#4A90A0] text-white' : 'bg-gray-100 text-gray-700'}`}
+                  onClick={() => handleCurrentChange('delivery')}
+                >
+                  📦 Delivery
+                </button>
               </div>
-            </div>
-          </div>
 
-          <div className="bg-[#4A90A0]/10 rounded-lg p-4 mb-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-gray-700 font-medium">Estimated Price</p>
-                <p className="text-[#4A90A0] text-2xl font-bold">₹{distance ? Math.ceil(parseFloat(distance) * 12) : "---"}</p>
+              {/* Map */}
+              <div ref={mapRef}>
+                <LoadScript
+                
+                  googleMapsApiKey="AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM"
+                  libraries={libraries}
+                >
+                  <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={pickupLatLng || defaultCenter}
+                    zoom={12}
+                  >
+                    {pickupLatLng && (
+                      <Marker position={pickupLatLng} icon={{ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png" }} />
+                    )}
+                    {dropoffLatLng && (
+                      <Marker position={dropoffLatLng} icon={{ url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png" }} />
+                    )}
+                    {directions && <DirectionsRenderer directions={directions} options={{ suppressMarkers: true }} />}
+                  </GoogleMap>
+                </LoadScript>
               </div>
-              <div>
-                <p className="text-gray-700 font-medium">Estimated Time</p>
-                <p className="text-gray-800 font-bold">{duration || "---"}</p>
+
+              {/* Inputs */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <PlaceInput label="Pickup Location" placeholder="Enter pickup location" value={pickup} setValue={setPickup} />
+                <PlaceInput label="Dropoff Location" placeholder="Enter drop location" value={dropoff} setValue={setDropoff} />
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                  <input
+                    type="date"
+                    className="w-full py-3 px-4 rounded-lg bg-gray-100 border-none focus:ring-[#4A90A0]/40"
+                    value={rideDate}
+                    onChange={(e) => setRideDate(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                  <input
+                    type="time"
+                    className="w-full py-3 px-4 rounded-lg bg-gray-100 border-none focus:ring-[#4A90A0]/40"
+                    value={rideTime}
+                    onChange={(e) => setRideTime(e.target.value)}
+                  />
+                </div>
               </div>
-              <div>
-                <p className="text-gray-700 font-medium">Distance</p>
-                <p className="text-gray-800 font-bold">{distance || "---"}</p>
-              </div>
-            </div>
-          </div>
-          {currentScreen === 'delivery' && (
+
+              {/* Ride Summary */}
+
+              {currentScreen === 'ride' && (
+<div className="bg-[#4A90A0]/10 rounded-lg p-4 my-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-sm text-gray-700">Estimated Price</p>
+                  <p className="text-xl font-bold text-[#4A90A0]">₹{distance ? Math.ceil(parseFloat(distance) * 12) : "---"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-700">Duration</p>
+                  <p className="text-lg font-semibold">{duration || "---"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-700">Distance</p>
+                  <p className="text-lg font-semibold">{distance || "---"}</p>
+                </div>
+              </div>)}
+               {currentScreen === 'delivery' && (
     <>
       {/* 🔧 Approximate Weight input */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Item Weight (approx)</label>
         <input
           type="number"
-          placeholder="e.g. 5"
+          placeholder="e.g. 5(all weight in kg)"
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
           className="w-full py-3 px-4 rounded-lg bg-[#F5F7F6] border-none text-sm focus:outline-none focus:ring-2 focus:ring-[#4A90A0]/30"
         />
       </div>
@@ -267,17 +311,24 @@ export default function Rides() {
       </div>
     </>
   )}
-          <button className="!rounded-button whitespace-nowrap cursor-pointer w-full bg-[#4A90A0] hover:bg-[#4A90A0]/90 text-white py-3 px-4 rounded-lg text-center font-medium">
-            {currentText}
-          </button>
-        </div>
-      </div>
-    </section>
-    {/* <Services notshow="rides"></Services> */}
-    <DriverList></DriverList>
-     <Footer></Footer>
-    </main>
+
+              {/* Book Button */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleBooking();
+                }}
+                className="w-full bg-[#4A90A0] hover:bg-[#4A90A0]/90 text-white py-3 rounded-lg font-medium"
+              >
+                {currentText}
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <DriverList />
+        <Footer />
+      </main>
     </>
-    
   );
 }
