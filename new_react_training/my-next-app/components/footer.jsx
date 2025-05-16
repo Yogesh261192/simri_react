@@ -73,7 +73,7 @@ function Footer(){
                 </li> */}
                 <li className="flex items-start">
                   <i className="fas fa-envelope mt-1 mr-2"></i>
-                  <span>simdiorganisation@gmail.com</span>
+                  <span>team@simdi.in</span>
                 </li>
               </ul>
             </div>
