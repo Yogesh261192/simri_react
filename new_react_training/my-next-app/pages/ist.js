@@ -7,7 +7,7 @@ import Products from '../components/products';
 import Services from '../components/Services';
 // import Rides from './Rides';
 import AllProducts from '../components/AllProduct';
-import EmailVerificationPage from '../components/EmailVerificationPage';
+import EmailVerificationPage from './EmailVerificationPage';
 
 
 export default function List() {

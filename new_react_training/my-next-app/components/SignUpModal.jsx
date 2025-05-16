@@ -50,7 +50,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
       const user = await account.get(); 
       setUser(user)
 
-      let urlDetails= await account.createVerification('http://simdi.in/verify-email'); // must be whitelisted in Appwrite
+      let urlDetails= await account.createVerification('http://simdi.in/emailverification'); // must be whitelisted in Appwrite
       console.log(urlDetails);
       showToast({ message: "Sign Up success you are logged in. Please check your email for verification link", type: "success" })
       setIsSignUpOpen(false);
