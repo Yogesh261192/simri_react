@@ -3,7 +3,9 @@ import { account } from "../appwriteConfig";
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import DriverList from "../components/Driver";
+import { useUser } from "../components/userContext";
 import Head from "next/head";
+import SignUpModal from "../components/SignUpModal";
 // import { useToast } from './ToastContext';
 import { useToast } from "../components/ToastContext";
 import {
@@ -21,6 +23,8 @@ const libraries = ["places"];
 
 export default function Rides() {
     const { showToast } = useToast();
+    const { user,setUser} = useUser();
+    const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [directions, setDirections] = useState(null);
@@ -32,7 +36,8 @@ export default function Rides() {
   const [currentText, setCurrentText] = useState("Book Now");
   const [rideDate, setRideDate] = useState("");
   const [rideTime, setRideTime] = useState("");
-  const [weight, setWeight ]= useState("")
+  const [weight, setWeight ]= useState("");
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
 
   const mapRef = useRef(null);
   function clearData(){
@@ -88,11 +93,36 @@ export default function Rides() {
       );
     }
   }, [pickupLatLng, dropoffLatLng]);
-  
+   const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+   async function handleSignIn(){
+    try {
+      let user= await account.createEmailPasswordSession(formData.email, formData.password);
+    console.log(user)
+    const userData = await account.get(); // Fetch user info
+    console.log(userData);
+    setUser(userData);
+    showToast({ message: 'Login success!', type: 'success' })
+    setIsSignInOpen(false);
+    } catch (error) {
+      console.log(error.message)
+      showToast({ message: error.message, type: 'error' })
+    }
+    // setUser(user)
+  }
 
   const handleBooking = async () => {
-      const user = await account.get(); // fetch user details
-         console.log(user)
+    if(user){
+      console.log("Proceeding to checkout:");
+    // redirect('/checkout'); //
+    // setIsOpen(true)
+    }
+    else{
+    setIsSignInOpen(true);
+    return
+    }
     if(currentScreen=="ride"){
       if (!pickup || !dropoff || !rideDate || !rideTime) {
       showToast({message:"Please fill in pickup, dropoff, date, and time.", type:"error"});
@@ -182,16 +212,121 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
     setCurrentScreen(param);
     setCurrentText(param === "ride" ? "Book Now" : "Deliver Now");
   };
+  function handleChange(e){
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  }
 
   return (
     <>
       <Head>
         <title>Rides</title>
         <meta name="description" content="Book ride or delivery in Uttarakhand" />
+        <meta name="keywords" content="delivery,fresh,natural, rishikesh,pahadi, ride, pauri, organic, travel, dehradoon, yatra, driver" />
+        <meta name="author" content="yogesh mamgain" />
+        <link rel="canonical" href="http://simdi.in" />
+        <meta property="og:title" content="SIMDI" />
+        <meta property="og:description" content="simdi." />
+        <meta property="og:url" content="http://simdi.in" />
+        <meta property="og:type" content="website" />
       </Head>
 
       <main>
         <Header />
+         {isSignInOpen && (
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white w-full max-w-md rounded-xl p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold">Sign In</h2>
+              <button
+                onClick={() => setIsSignInOpen(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+
+            <form className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
+                  placeholder="Enter your email"
+                  onChange={handleChange} value={formData.email}
+                  name="email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input
+                  type="password"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
+                  placeholder="Enter your password"
+                  onChange={handleChange} value={formData.password}
+                  name="password"
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <label className="flex items-center">
+                  <input type="checkbox" className="rounded text-[#2C5530] focus:ring-[#2C5530]" />
+                  <span className="ml-2 text-sm text-gray-600">Remember me</span>
+                </label>
+                <a href="#" className="text-sm text-[#2C5530] hover:text-[#2C5530]/80">Forgot password?</a>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleSignIn}
+                className="w-full bg-[#2C5530] hover:bg-[#2C5530]/90 text-white py-3 rounded-lg font-medium"
+              >
+                Sign In
+              </button>
+
+              {/* <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  className="flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  <i className="fab fa-google text-red-500"></i>
+                  Google
+                </button>
+                <button
+                  type="button"
+                  className="flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  <i className="fab fa-facebook text-blue-500"></i>
+                  Facebook
+                </button>
+              </div> */}
+
+              <p className="text-center text-sm text-gray-600 mt-6">
+                Don't have an account?{" "}
+                <a href="#" className="text-[#2C5530] hover:text-[#2C5530]/80 font-medium"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIsSignInOpen(false);
+                  setIsSignUpOpen(true);
+                  }}>
+                  Sign up
+                </a>
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
+            {isSignUpOpen && <SignUpModal setIsSignUpOpen={setIsSignUpOpen} />}
+
         <section className="py-20 bg-[#F5F7F6]">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
@@ -201,6 +336,9 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
               <p className="text-gray-600 max-w-2xl mx-auto">
                 Fast, reliable transportation and delivery services connecting Himalayan communities
               </p>
+               <p className="text-gray-700 max-w-2xl mx-auto text-lg font-semibold">
+  🛣️ Currently serving routes from <span className="text-[#4A90A0] font-bold">Delhi</span> to <span className="text-[#4A90A0] font-bold">Uttarakhand</span> and <span className="text-[#4A90A0] font-bold">Himachal Pradesh</span>
+</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">

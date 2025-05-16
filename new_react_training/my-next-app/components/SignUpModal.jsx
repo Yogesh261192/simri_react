@@ -3,10 +3,15 @@ import React, { useState } from 'react';
 import { account, ID } from '../appwriteConfig';
 import { useToast } from './ToastContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useRouter } from 'next/router';  // ✅ Import useRouter
+import { useRedirect } from './Common';
+
 
 import { useUser } from './userContext';
 
 const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
+    const router = useRouter(); // ✅ Use the useRouter hook
+     const redirect = useRedirect();
   const [showPassword, setShowPassword] = useState(false);
   const { setUser } = useUser();
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -40,19 +45,26 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
 
       let res= await account.create('unique()', formData.email, formData.password, formData.name);
       // const data = await res.json();
-      console.log(res)
+      console.log(res, 'tahahahha')
       // console.log(data)
-      // if (!data.ok) {
-      //   throw new Error(data.error || 'Registration failed');
-      // }
+      if (!res.$id) {
+            showToast({ message: "Please try again", type: "error" })
+        return
+      }
 
       await account.createEmailPasswordSession(formData.email, formData.password);
       const user = await account.get(); 
-      setUser(user)
+      // setUser(user)
 
       let urlDetails= await account.createVerification('http://simdi.in/emailverification'); // must be whitelisted in Appwrite
-      console.log(urlDetails);
-      showToast({ message: "Sign Up success you are logged in. Please check your email for verification link", type: "success" })
+      // console.log(urlDetails);
+       await account.deleteSession('current');
+      // setUser(null); // Clear user in context
+
+      showToast({ message: "Sign Up success. Please check your email for verification link", type: "success" })
+       setTimeout(() => {
+            redirect('/'); // redirect to homepage
+          }, 500);
       setIsSignUpOpen(false);
     } catch (error) {
       let err= error.message=="A user with the same id, email, or phone already exists in this project."? "User already registered":error.message
