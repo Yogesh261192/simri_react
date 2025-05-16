@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { account } from '../appwriteConfig';
 import { useUser } from '../components/userContext';
-
+import { useRedirect } from "./Common";
 export default function EmailVerificationPage() {
+   const redirect = useRedirect();
   const [message, setMessage] = useState('Verifying...');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { setUser } = useUser(); // Or use setIsSignedIn(true)
 //   const account = new Account(client);
   useEffect(() => {
@@ -21,21 +22,21 @@ export default function EmailVerificationPage() {
           setUser(user); // set user context
           setMessage('✅ Email verified!');
           setTimeout(() => {
-            navigate('/'); // redirect to homepage
+            redirect('/'); // redirect to homepage
           }, 1500);
         })
         .catch((err) => {
           console.error('Verification failed:', err);
           setMessage(`❌ Email verification failed, ${err.message}`);
           setTimeout(() => {
-            navigate('/'); // redirect to homepage
+            redirect('/'); // redirect to homepage
           }, 1500);
         });
     } else {
       setMessage('Invalid verification link.');
       setTimeout(() => {
         console.log('ii')
-            navigate('/'); // redirect to homepage
+            redirect('/'); // redirect to homepage
           }, 1500);
     }
   }, []);
