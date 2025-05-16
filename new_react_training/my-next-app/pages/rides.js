@@ -311,7 +311,7 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
               </div> */}
 
               <p className="text-center text-sm text-gray-600 mt-6">
-                Don't have an account?{" "}
+                Dont have an account?{" "}
                 <a href="#" className="text-[#2C5530] hover:text-[#2C5530]/80 font-medium"
                 onClick={(e) => {
                   e.preventDefault()
