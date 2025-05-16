@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { account } from '../appwriteConfig';
 import { useUser } from '../components/userContext';
-import { useRedirect } from "./Common";
+// import { useRedirect } from "./Common";
+import { useRedirect } from '../components/Common';
 export default function EmailVerificationPage() {
    const redirect = useRedirect();
   const [message, setMessage] = useState('Verifying...');
