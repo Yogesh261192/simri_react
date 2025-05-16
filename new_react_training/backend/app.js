@@ -6,14 +6,16 @@ dotenv.config();
 const authRoutes = require('./routes/auth');
 const { registerUser, confirmOrder } = require('./controllers/authController');
 
+const app = express();
+
 // Define allowed origins
 const allowedOrigins = ['https://simdi.in', 'https://www.simdi.in'];
 
 // CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log(origin, 'origin');
     // Allow requests with no origin (e.g., mobile apps, curl)
-    console.log(origin, 'origin')
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -24,21 +26,19 @@ const corsOptions = {
   credentials: true
 };
 
-const app = express();
-
-// Apply CORS middleware
+// Apply CORS middleware globally
 app.use(cors(corsOptions));
 
-// Handle preflight requests
-// app.options('*', cors(corsOptions));
-app.options('/confirm_order', cors()) 
+// Handle preflight requests globally
+app.options('*', cors(corsOptions));
+
 // Parse JSON request bodies
 app.use(express.json());
 
 // API routes
 app.use('/api/auth', authRoutes);
 app.post('/register', registerUser);
-app.post('/confirm_order',cors(), confirmOrder);
+app.post('/confirm_order', confirmOrder);
 
 // Start server
 const PORT = process.env.PORT || 5000;
