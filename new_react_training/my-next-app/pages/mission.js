@@ -58,8 +58,8 @@ export default function OurMission() {
     <div className="mission-content p-2">
             {/* Vision Banner */}
             <div className="relative h-[500px] mb-16 rounded-xl overflow-hidden">
-              <Image
-              width={400} height={400}
+              <img
+              // width={400} height={400}
                 src={mission_image.src}
                 alt="Uttarakhand Mountain Landscape"
                 className="w-full h-full object-cover object-top"

@@ -15,11 +15,11 @@ export default function AboutUs() {
       <div className="about-content p-2">
             {/* Hero Section */}
             <div className="relative h-[500px] mb-3 rounded-xl overflow-hidden">
-              <Image
+              <img
                 src={panorama.src}
                 alt="Uttarakhand Village Landscape"
                 className="w-full h-full object-cover object-top"
-                width={400} height={400}
+                // width={400} height={400}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex flex-col justify-center px-16">
                 <h1 className="text-5xl font-bold text-white mb-4">
@@ -34,11 +34,11 @@ export default function AboutUs() {
             {/* Our Journey Section */}
             <div className="flex flex-col md:flex-row gap-12 mb-4">
               <div className="md:w-1/2">
-                <Image
+                <img
                   src={mahila_madal.src}
                   alt="Village Women Working"
                   className="w-full h-[500px] object-cover object-top rounded-xl shadow-lg"
-                  width={400} height={400}
+                  // width={400} height={400}
                 />
               </div>
               <div className="md:w-1/2 flex flex-col justify-center">
