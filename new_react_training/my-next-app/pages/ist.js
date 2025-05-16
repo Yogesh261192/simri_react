@@ -6,8 +6,8 @@ import Footer from '../components/footer';
 import Products from '../components/products';
 import Services from '../components/Services';
 // import Rides from './Rides';
-import AllProducts from '../components/AllProduct';
-import EmailVerificationPage from './EmailVerificationPage';
+// import AllProducts from '../components/AllProduct';
+// import EmailVerificationPage from './emailverification';
 
 
 export default function List() {
