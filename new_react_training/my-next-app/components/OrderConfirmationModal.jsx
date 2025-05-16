@@ -35,7 +35,7 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
     }
      const user = await account.get(); // fetch user details
          console.log(user)
-       let response = await fetch("https://simdi.in/confirm_order", {
+       let response = await fetch("http://localhost:5000/confirm_order", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // 🔥 This is essential
@@ -43,7 +43,8 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
         body: JSON.stringify({
               email: user.email,
               total_amount:total,
-              items:cartItems
+              items:cartItems,
+              details: formData  
             })
       });
       console.log(response, 'response')

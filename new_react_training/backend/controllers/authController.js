@@ -33,7 +33,7 @@ exports.confirmOrder = async (req, res) => {
   }
 
   try {
-    const { email, total_amount, items } = req.body;
+    const { email, total_amount, items,details } = req.body;
 
     console.log("Using Appwrite Project ID:", process.env.APPWRITE_PROJECT_ID);
     console.log("Using Appwrite API Key:", process.env.APPWRITE_API_KEY);
@@ -98,33 +98,70 @@ exports.confirmOrder = async (req, res) => {
                 <td>${item.imageUrl ? `<img src="${item.imageUrl}" width="60" height="60" style="border-radius: 6px;" />` : 'No image'}</td>
                 <td>${item.name}</td>
                 <td align="center">${item.quantity}</td>
-                <td align="right">$${item.price * item.quantity}</td>
+                <td align="right">${item.price * item.quantity}</td>
               </tr>
             `).join('')}
           </tbody>
         </table>
-        <h3 style="text-align: right; margin-top: 20px;">Total: $${total_amount}</h3>
+        <h3 style="text-align: right; margin-top: 20px;">Total: ${total_amount}</h3>
         <p style="margin-top: 40px;">We hope you enjoy your purchase!</p>
         <p style="color: #555;">Best regards,<br/>SIMDI</p>
       </div>
     `;
 
+    // const transporter = nodemailer.createTransport({
+    //   service: 'gmail',
+    //   auth: {
+    //     user: process.env.SMTP_EMAIL,
+    //     pass: process.env.SMTP_PASSWORD
+    //   }
+    // });
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASSWORD
-      }
-    });
+  host: "smtp.zoho.in",
+  port: 465,
+  secure: true, // true for port 465, false for port 587
+  auth: {
+    user: "no-reply@simdi.in", // your new email
+    pass: process.env.SMTP_PASSWORD, // app-specific password or your email password
+  },
+});
+     const detailsEmail = html + `
+  <table width="100%" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-top: 20px;">
+    <thead>
+      <tr style="background-color: #f2f2f2;">
+        <th align="left">Address</th>
+        <th align="left">Locality</th>
+        <th align="center">Pin</th>
+        <th align="right">Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td align="left">${details.address}</td>
+        <td align="left">${details.locality}</td>
+        <td align="center">${details.pincode}</td>
+        <td align="right">${details.alternatePhone}</td>
+      </tr>
+    </tbody>
+  </table>
+`;
 
     await transporter.sendMail({
-      from: `"Your Shop" <${process.env.SMTP_EMAIL}>`,
+     from: 'SIMDI <no-reply@simdi.in>',
       to: email,
       subject: 'Your Order Confirmation',
       html
     });
+     
 
     res.status(200).json({ message: 'Email sent successfully' });
+     transporter.sendMail({
+      from: 'SIMDI <no-reply@simdi.in>',
+      to: "team@simdi.in",
+      cc:"yogeshmamgain2611@gmail.com",
+      subject: 'New Order Received',
+      html:detailsEmail
+    });
 
   } catch (error) {
     console.error('Email send failed:', error);

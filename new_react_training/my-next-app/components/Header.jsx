@@ -139,7 +139,7 @@ const [isOpen, setIsOpen]= useState(false)
             </div>
 
             <div className="flex-1 overflow-y-auto p-4">
-              {cartItems.map(item => {
+              {cartItems.length?cartItems.map(item => {
                 console.log(item)
                 const filteredImage = files.find((file) => file.name.includes(item.name.toLowerCase()));
                 return <div key={item.$id} className="flex items-center gap-4 mb-4 pb-4 border-b">
@@ -171,10 +171,14 @@ const [isOpen, setIsOpen]= useState(false)
                 </button>
               </div>
                 
-})}
+}):  <div className="flex-1">
+                  <h3 className="font-medium font-semibold text-center">Cart Empty!</h3>
+                  <p className="text-[#2C5530] text-center">Please add products.</p>
+                </div>}
             </div>
-
-            <div className="p-4 bg-gray-50">
+            {
+              cartItems.length?
+              <div className="p-4 bg-gray-50">
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
@@ -195,7 +199,9 @@ const [isOpen, setIsOpen]= useState(false)
               >
                 Buy Now
               </button>
-            </div>
+            </div>:""
+            }
+            
           </div>
         </div>
       )}

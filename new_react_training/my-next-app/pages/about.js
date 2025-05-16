@@ -2,6 +2,9 @@ import Image from 'next/image';
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import rides from '../public/assets/images/village-women.jpg';
+import mahila_madal from '../public/assets/images/mahila_mandal.jpg'
+import panorama from '../public/assets/images/panorama.jpg'
+
 // import Image from 'next/image';
 // import delivery_services from '../public/assets/images/delivery_services.jpg';
 
@@ -9,11 +12,11 @@ export default function AboutUs() {
   return (
     <>
     <Header></Header>
-      <div className="about-content">
+      <div className="about-content p-2">
             {/* Hero Section */}
-            <div className="relative h-[500px] mb-16 rounded-xl overflow-hidden">
+            <div className="relative h-[500px] mb-3 rounded-xl overflow-hidden">
               <Image
-                src="https://readdy.ai/api/search-image?query=Beautiful%20panoramic%20view%20of%20remote%20Uttarakhand%20mountain%20villages%20nestled%20in%20green%20valleys%20with%20traditional%20houses%20and%20terraced%20fields%2C%20snow-capped%20Himalayan%20peaks%20in%20background%2C%20morning%20mist%2C%20dramatic%20lighting%2C%20cinematic%2C%20high%20resolution%20landscape%20photography&width=1400&height=500&seq=uttrakhand-village-1&orientation=landscape"
+                src={panorama.src}
                 alt="Uttarakhand Village Landscape"
                 className="w-full h-full object-cover object-top"
                 width={400} height={400}
@@ -29,10 +32,10 @@ export default function AboutUs() {
             </div>
 
             {/* Our Journey Section */}
-            <div className="flex flex-col md:flex-row gap-12 mb-20">
+            <div className="flex flex-col md:flex-row gap-12 mb-4">
               <div className="md:w-1/2">
                 <Image
-                  src="https://readdy.ai/api/search-image?query=Group%20of%20Uttarakhand%20village%20women%20in%20traditional%20colorful%20attire%20working%20together%20processing%20local%20organic%20products%2C%20sorting%20herbs%20and%20spices%2C%20warm%20lighting%2C%20authentic%20setting%2C%20detailed%20expressions%20showing%20determination%20and%20pride%2C%20photojournalistic%20style&width=600&height=500&seq=mahila-mandal-1&orientation=landscape"
+                  src={mahila_madal.src}
                   alt="Village Women Working"
                   className="w-full h-[500px] object-cover object-top rounded-xl shadow-lg"
                   width={400} height={400}
@@ -74,7 +77,7 @@ export default function AboutUs() {
             </div>
 
             {/* Community Focus Section */}
-            <div className="mb-20">
+            <div className="mb-5">
               <h2 className="text-3xl font-bold text-center text-green-700 mb-12">
                 Our Community Focus
               </h2>
@@ -123,7 +126,7 @@ export default function AboutUs() {
             </div>
 
             {/* Impact Gallery */}
-           <div className="mb-25">
+           <div className="mb-5">
               <h2 className="text-3xl font-bold text-center text-green-700 mb-12">
                 Our Impact in Pictures
               </h2>
