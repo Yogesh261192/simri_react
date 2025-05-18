@@ -63,14 +63,21 @@ const OrderHistoryPage = () => {
       let items = db.documents;
       setOrders(items.map((item) => {
         let items_2 = JSON.parse(item.order);
-        console.log(files, 'filess')
-        if(files.length){
-const filteredImage = files.find((file) => file.name.toLowerCase().includes(items_2[0].name.toLowerCase()));
-        console.log(filteredImage)
-        items_2[0].image= `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${filteredImage.$id}/view?project=673ebe09000b35b67d8b&mode=admin`
-        console.log(items_2[0].image, 'imageutrrl')
-        }
-        
+        console.log(items_2, 'details')
+        // console.log(files, 'filess')
+        if (files.length) {
+  items_2.forEach((item) => {
+    const matchedFile = files.find((file) =>
+      file.name.toLowerCase().includes(item.name.toLowerCase())
+    );
+    if (matchedFile) {
+      item.image = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${matchedFile.$id}/view?project=673ebe09000b35b67d8b&mode=admin`;
+    } else {
+      item.image = "/placeholder.png"; // fallback if no match
+    }
+  });
+}
+
         let total = items_2.reduce((c, a) => c + Number(a.price), 0);
         // console.log(items_2)
         return {
@@ -92,7 +99,7 @@ const filteredImage = files.find((file) => file.name.toLowerCase().includes(item
    const fetchFiles = async () => {
       try {
         const response = await storage.listFiles(BUCKET_ID);
-        console.log(response, 'respinse')
+        // console.log(response, 'respinse')
         setFiles(response.files);
         //   console.log(files)
       } catch (error) {
