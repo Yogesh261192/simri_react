@@ -18,7 +18,7 @@ export default function Products(params) {
         try {
           const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
           console.log(res.documents)
-          res.documents.splice(3,4)
+          res.documents.length=4
           setItems(res.documents);
         } catch (error) {
           console.error('Error fetching data:', error);

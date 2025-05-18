@@ -69,7 +69,7 @@ export default function AllProducts(params) {
                 Discover authentic goods from local Himalayan artisans and producers
               </p>
             </div>
-            <div className="mt-4 md:mt-0">
+            <div className="mt-4 block">
               <div className="flex space-x-2">
                 <button className="!rounded-button whitespace-nowrap cursor-pointer bg-[#2C5530] text-white py-2 px-4 rounded-full text-sm font-medium">All</button>
                 <button className="!rounded-button whitespace-nowrap cursor-pointer bg-[#F5F7F6] text-gray-700 py-2 px-4 rounded-full text-sm font-medium hover:bg-gray-200">Handicrafts</button>
@@ -81,6 +81,7 @@ export default function AllProducts(params) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {items.map((item) => {
+              console.log(item, 'itemss')
               const filteredImage = files.find((file) => file.name.includes(item.name.toLowerCase()));
               const cartItem = cartItems.find((i) => i.$id === item.$id);
 

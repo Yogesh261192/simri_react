@@ -1,6 +1,7 @@
 import { useRedirect } from './Common';
 import { useCart } from './CartContext';
-import { useState, useEffect } from 'react';
+import { Query } from 'appwrite';
+import { useState, useEffect, use } from 'react';
 const DATABASE_ID = '6740474900354338e949';
 const COLLECTION_ID = '674047600025528835b3';
 const BUCKET_ID = '6742e69c003e3ca0399e';
@@ -12,6 +13,7 @@ import { useUser } from './userContext';
 import UserButton from './Userinfo';
 import { useToast } from './ToastContext';
 import OrderConfirmationModal from './OrderConfirmationModal';
+const order_id= "6740474900354338e949"
 
 function Header() {
   const redirect = useRedirect();
@@ -32,6 +34,7 @@ const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
 const [userId, setUserId] = useState(null);
 const { user,setUser} = useUser();
 const [isOpen, setIsOpen]= useState(false)
+const [orders, setOrders]= useState(false)
 // console.log(user)
  const [formData, setFormData] = useState({
     email: '',
@@ -40,6 +43,7 @@ const [isOpen, setIsOpen]= useState(false)
 
 
   useEffect (()=>{
+      if (!user || !user.email) return;
     const fetchFiles = async () => {
       try {
         const response = await storage.listFiles(BUCKET_ID);
@@ -48,10 +52,14 @@ const [isOpen, setIsOpen]= useState(false)
       } catch (error) {
         console.error('Error listing files:', error);
       }
+          let db= await databases.listDocuments(order_id, "6742d9eb00270c32b419",[Query.equal("email", user.email),Query.equal("type", "order")])
+      if(db.documents.length){
+        setOrders(true)
+      }
     };
     fetchFiles()
 
-  },[])
+  },[user])
   
   
 
@@ -103,9 +111,14 @@ const [isOpen, setIsOpen]= useState(false)
 
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
+              {orders && (
+                <button onClick={() => redirect('history')} className="mr-2 relative text-gray-600 hover:text-[#2C5530] cursor-pointer" aria-label="Order History">
+                  <i className="fas fa-history text-gray-600"></i>
+                </button>
+              )}
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="relative text-gray-600 hover:text-[#2C5530]"
+                className="relative text-gray-600 hover:text-[#2C5530] cursor-pointer"
               >
                 <i className="fas fa-shopping-cart text-xl"></i>
                 {cartItems.length > 0 && (
@@ -114,8 +127,9 @@ const [isOpen, setIsOpen]= useState(false)
                   </span>
                 )}
               </button>
-              <UserButton setIsSignInOpen={setIsSignInOpen} ></UserButton>
+              <UserButton setIsSignInOpen={setIsSignInOpen} className="cursor-pointer"></UserButton>
             </div>
+            
           </div>
 
           {/* <button className="md:hidden text-gray-600">

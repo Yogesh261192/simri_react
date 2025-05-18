@@ -29,9 +29,9 @@ export default function UserButton({ setIsSignInOpen }) {
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative " ref={dropdownRef} >
       <button
-        className="text-gray-600 hover:text-[#2C5530] flex"
+        className="text-gray-600 hover:text-[#2C5530] flex cursor-pointer"
         onClick={() => {
           if (user) {
             setIsDropdownOpen(prev => !prev);

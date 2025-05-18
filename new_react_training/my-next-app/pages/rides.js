@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { account } from "../appwriteConfig";
+import { account,databases } from "../appwriteConfig";
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import DriverList from "../components/Driver";
@@ -16,6 +16,7 @@ import {
 } from "@react-google-maps/api";
 import PlaceInput from "../components/PlaceInput";
 import html2canvas from "html2canvas";
+const order_id= "6740474900354338e949"
 
 const defaultCenter = { lat: 28.6139, lng: 77.209 };
 const containerStyle = { width: "100%", height: "400px" };
@@ -133,8 +134,7 @@ export default function Rides() {
     const canvas = await html2canvas(mapElement);
     const imageData = canvas.toDataURL("image/png");
 const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
-    
-    const formData = {
+ const formData = {
       pickup,
       dropoff,
       rideDate,
@@ -145,6 +145,24 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
       userName: user.name,
       email: user.email
     };
+       databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
+            {
+               order: JSON.stringify({
+                pickup,
+                dropoff,
+                rideDate,
+                staticMapUrl
+               }),
+        name: user.name,
+        phone: user.phone,
+        date: new Date().toISOString(), // or specific ISO string
+        email: user.email,
+        type: "ride",
+        status: "pending"
+    
+            }
+          )
+   
     
 
     try {
@@ -185,6 +203,23 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
       userName: user.name,
       email: user.email
     };
+   databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
+            {
+               order: JSON.stringify({
+                pickup,
+                dropoff,
+                rideDate,
+                staticMapUrl
+               }),
+        name: user.name,
+        phone: user.phone,
+        date: new Date().toISOString(), // or specific ISO string
+        email: user.email,
+        type: "delivery",
+        status: "pending"
+    
+            }
+          )
      try {
       const res = await fetch(" https://simdi.in/confirm_delivery", {
         method: "POST",

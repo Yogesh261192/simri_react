@@ -5,6 +5,7 @@ import Footer from '../components/footer';
 import { useCart } from '../components/CartContext';
 import Head from 'next/head';
 import Image from 'next/image';
+import { Coming_Soon } from 'next/font/google';
 
 const DATABASE_ID = '6740474900354338e949';
 const COLLECTION_ID = '674047600025528835b3';
@@ -21,6 +22,7 @@ export default function AllProducts({ serverProducts }) {
       try {
         const response = await storage.listFiles(BUCKET_ID);
         setFiles(response.files);
+      
       } catch (error) {
         console.error('Error listing files:', error);
       } finally {
@@ -75,10 +77,19 @@ export default function AllProducts({ serverProducts }) {
                   Discover authentic goods from local Himalayan artisans and producers
                 </p>
               </div>
+                <div className="mt-4 ">
+              <div className="flex space-x-2">
+                <button className="!rounded-button whitespace-nowrap cursor-pointer bg-[#2C5530] text-white py-2 px-4 rounded-full text-sm font-medium">All</button>
+                <button className="!rounded-button whitespace-nowrap cursor-pointer bg-[#F5F7F6] text-gray-700 py-2 px-4 rounded-full text-sm font-medium hover:bg-gray-200">Handicrafts</button>
+                <button className="!rounded-button whitespace-nowrap cursor-pointer bg-[#F5F7F6] text-gray-700 py-2 px-4 rounded-full text-sm font-medium hover:bg-gray-200">Food</button>
+                <button className="!rounded-button whitespace-nowrap cursor-pointer bg-[#F5F7F6] text-gray-700 py-2 px-4 rounded-full text-sm font-medium hover:bg-gray-200">Textiles</button>
+              </div>
+            </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {items.map((item) => {
+                console.log(item, 'iteem')
                 const filteredImage = files.find((file) => file.name.toLowerCase().includes(item.name.toLowerCase()));
                 const cartItem = cartItems.find((i) => i.$id === item.$id);
 

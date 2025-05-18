@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { use } from 'react';
 import { useCart } from './CartContext';
 import { useState } from 'react';
-import { account } from '../appwriteConfig';
+import { account, databases } from '../appwriteConfig';
 import { useToast } from './ToastContext';
+const order_id= "6740474900354338e949"
 
 const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
        const [formData, setFormData] = useState({
@@ -33,8 +34,10 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
       showToast({message:"Please fill in all the details", type:"error"})
       return 
     }
+    console.log(cartItems, 'caritems')
      const user = await account.get(); // fetch user details
          console.log(user)
+        
        let response = await fetch("https://simdi.in/confirm_order", {
         method: 'POST',
         headers: {
@@ -47,6 +50,19 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
               details: formData  
             })
       });
+      let db= await databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
+        {
+           order: JSON.stringify(cartItems),
+    name: "John Doe",
+    phone: "1234567890",
+    date: new Date().toISOString(), // or specific ISO string
+    email: user.email,
+    type: "ride",
+    status: "pending"
+
+        }
+      )
+     
       console.log(response, 'response')
              showToast({message:"Please check your email for details", type:"success"})
               onClose(false)
