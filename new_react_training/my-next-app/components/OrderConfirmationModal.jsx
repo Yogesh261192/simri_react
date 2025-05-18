@@ -57,7 +57,7 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
     phone: "1234567890",
     date: new Date().toISOString(), // or specific ISO string
     email: user.email,
-    type: "ride",
+    type: "order",
     status: "pending"
 
         }
