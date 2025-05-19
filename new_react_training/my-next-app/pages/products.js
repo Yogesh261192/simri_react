@@ -55,28 +55,48 @@ export default function AllProducts({ serverProducts }) {
 
   return (
     <>
-      <Head>
-        <title>Products</title>
-        <meta name="description" content="pahadi and uttrakhand products as well as cab booking for char dham and all destinations in Himachal and Uttarakhand" />
-        <meta name="keywords" content="gauth, daal, namak, chawal, kaafal, pahadi, jhangora, product, uttrakhand, delivery, free" />
-        <meta name="author" content="yogesh mamgain" />
-        <link rel="canonical" href="https://simdi.in" />
-        <meta property="og:title" content="SIMDI" />
-        <meta property="og:description" content="simdi." />
-        <meta property="og:url" content="https://simdi.in" />
+        <Head>
+        <title>Buy Authentic Pahadi Products Online | SIMDI</title>
+        <meta name="description" content="Shop original Pahadi and Uttarakhand products like Gauth, Kaafal, Jhangora, and more. Delivered pan India. Discover Himalayan goods now." />
+        <meta name="keywords" content="pahadi products, buy pahadi products, uttarakhand products, himalayan goods, gauth, daal, jhangora, kaafal, organic, simdi" />
+        <meta name="author" content="Simdi Team" />
+        <link rel="canonical" href="https://www.simdi.in/products" />
+        <meta property="og:title" content="Buy Pahadi Products Online | SIMDI" />
+        <meta property="og:description" content="Authentic Himalayan goods delivered to your doorstep." />
+        <meta property="og:url" content="https://www.simdi.in/products" />
         <meta property="og:type" content="website" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Store",
+            name: "Simdi",
+            url: "https://www.simdi.in",
+            image: "https://www.simdi.in/simdi_logo.png",
+            description: "Buy authentic Pahadi and Uttarakhand products online",
+            sameAs: [
+              "https://www.instagram.com/yoursimdi/",
+              "https://www.facebook.com/Yoursimdi"
+            ]
+          })}
+        </script>
       </Head>
       <main>
         <Header />
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-              <div>
+              {/* <div>
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">Products</h2>
                 <p className="text-gray-600">
                   Discover authentic goods from local Himalayan artisans and producers
                 </p>
-              </div>
+              </div> */}
+                <div className=" text-gray-700">
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Buy Pahadi Products Online</h2>
+              <p>
+                Welcome to <strong>Simdi</strong> — your one-stop shop to <strong>buy authentic Pahadi products online</strong>. We deliver natural, handmade, and organic items like <strong>Gauth, Jhangora, Kaafal</strong>, and more, sourced directly from the hills of <strong>Uttarakhand</strong> and <strong>Himachal</strong>. Support local artisans and enjoy the taste of the Himalayas.
+              </p>
+            </div>
                 <div className="mt-4 ">
               <div className="flex space-x-2">
                 <button className="!rounded-button whitespace-nowrap cursor-pointer bg-[#2C5530] text-white py-2 px-4 rounded-full text-sm font-medium">All</button>

@@ -255,16 +255,17 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
   return (
     <>
       <Head>
-        <title>Rides</title>
-        <meta name="description" content="Book ride or delivery in Uttarakhand" />
-        <meta name="keywords" content="delivery,fresh,natural, rishikesh,pahadi, ride, pauri, organic, travel, dehradoon, yatra, driver" />
-        <meta name="author" content="yogesh mamgain" />
-        <link rel="canonical" href="https://simdi.in" />
-        <meta property="og:title" content="SIMDI" />
-        <meta property="og:description" content="simdi." />
-        <meta property="og:url" content="https://simdi.in" />
-        <meta property="og:type" content="website" />
-      </Head>
+  <title>Book Ride or Delivery to the Himalayas – SIMDI</title>
+  <meta name="description" content="Book reliable rides or deliveries from Delhi to Uttarakhand and Himachal Pradesh. Eco-friendly, fast and safe transportation to the Himalayas." />
+  <meta name="keywords" content="ride booking, delivery service, Delhi to Himalayas, Uttarakhand, Himachal Pradesh, eco-friendly travel, Himalayan delivery, pahadi transport, SIMDI ride, SIMDI delivery" />
+  <meta name="author" content="Yogesh Mamgain" />
+  <link rel="canonical" href="https://simdi.in/rides" />
+  <meta property="og:title" content="Book Ride or Delivery to the Himalayas – SIMDI" />
+  <meta property="og:description" content="Plan your ride or delivery from Delhi to the Himalayas with SIMDI. Serving Uttarakhand & Himachal Pradesh with sustainable transport." />
+  <meta property="og:url" content="https://simdi.in/rides" />
+  <meta property="og:type" content="website" />
+</Head>
+
 
       <main>
         <Header />
@@ -365,16 +366,16 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
         <section className="py-20 bg-[#F5F7F6]">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                Book a Ride or Delivery
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Fast, reliable transportation and delivery services connecting Himalayan communities
-              </p>
-               <p className="text-gray-700 max-w-2xl mx-auto text-lg font-semibold">
-  🛣️ Currently serving routes from <span className="text-[#4A90A0] font-bold">Delhi</span> to <span className="text-[#4A90A0] font-bold">Uttarakhand</span> and <span className="text-[#4A90A0] font-bold">Himachal Pradesh</span>
-</p>
-            </div>
+  <h2 className="text-3xl font-bold text-gray-800 mb-4">
+    Book a Ride or Schedule a Delivery to the Himalayas
+  </h2>
+  <p className="text-gray-600 max-w-2xl mx-auto">
+    Fast, safe, and eco-conscious transportation and delivery services connecting <strong>Delhi</strong> with towns and villages across the Himalayan states.
+  </p>
+  <p className="text-gray-700 max-w-2xl mx-auto text-lg font-semibold mt-2">
+    🛣️ Currently operating from <span className="text-[#4A90A0] font-bold">Delhi</span> to <span className="text-[#4A90A0] font-bold">Uttarakhand</span> and <span className="text-[#4A90A0] font-bold">Himachal Pradesh</span>
+  </p>
+</div>
 
             <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
               {/* Buttons */}

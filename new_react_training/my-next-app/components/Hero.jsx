@@ -33,7 +33,10 @@ function Hero() {
               <span className="font-bold">D</span>elivery, and{" "}
               <span className="font-bold">I</span>ntercity Transport
             </p>
-            <p className="text-lg mb-8">Empowering local communities of <span className="font-bold">Uttrakhand</span> and <span className="font-bold">Himachal</span> through sustainable commerce and transportation solutions in the Himalayan region.</p>
+            <p className="text-lg mb-8">
+            Supporting <span className="font-bold">local communities in Uttarakhand</span> and <span className="font-bold">Himachal Pradesh</span> by enabling <strong>sustainable commerce</strong> and <strong>eco-friendly transportation</strong> solutions across the Himalayan region. Discover and shop <strong>authentic Pahadi products</strong> while helping build a greener, self-reliant mountain economy.
+            </p>
+
           </div>
         </div>
       </div>
