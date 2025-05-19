@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "static-export": "next build"
+    "static-export": "next build",
+     "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.6",
@@ -14,6 +15,7 @@
     "axios": "^1.9.0",
     "html2canvas": "^1.4.1",
     "next": "15.3.2",
+    "next-sitemap": "^4.2.3",
     "node-appwrite": "^16.0.0",
     "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.3",
