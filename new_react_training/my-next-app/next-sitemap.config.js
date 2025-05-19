@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://simri.in',
+  siteUrl: 'https://simdi.in',
   generateRobotsTxt: true, // Will auto-create correct robots.txt
 }
