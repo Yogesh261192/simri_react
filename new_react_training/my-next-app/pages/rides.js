@@ -259,10 +259,10 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
         <meta name="description" content="Book ride or delivery in Uttarakhand" />
         <meta name="keywords" content="delivery,fresh,natural, rishikesh,pahadi, ride, pauri, organic, travel, dehradoon, yatra, driver" />
         <meta name="author" content="yogesh mamgain" />
-        <link rel="canonical" href="http://simdi.in" />
+        <link rel="canonical" href="https://simdi.in" />
         <meta property="og:title" content="SIMDI" />
         <meta property="og:description" content="simdi." />
-        <meta property="og:url" content="http://simdi.in" />
+        <meta property="og:url" content="https://simdi.in" />
         <meta property="og:type" content="website" />
       </Head>
 

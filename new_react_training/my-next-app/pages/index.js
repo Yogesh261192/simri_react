@@ -14,11 +14,11 @@ export default function HomePage() {
         <meta name="keywords" content="pahadi, uttrakhand, simdi, ride, booking, products,
         mahila, mandal" />
         <meta name="author" content="yogesh mamgain" />
-        <link rel="canonical" href="http://simdi.in" />
+        <link rel="canonical" href="https://simdi.in" />
         {/* Open Graph / Facebook */}
         <meta property="og:title" content="SIMDI" />
         <meta property="og:description" content="simdi." />
-        <meta property="og:url" content="http://simdi.in" />
+        <meta property="og:url" content="https://simdi.in" />
         <meta property="og:type" content="website" />
         {/* Twitter */}
         {/* <meta name="twitter:card" content="summary_large_image" />

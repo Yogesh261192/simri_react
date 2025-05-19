@@ -60,10 +60,10 @@ export default function AllProducts({ serverProducts }) {
         <meta name="description" content="pahadi and uttrakhand products as well as cab booking for char dham and all destinations in Himachal and Uttarakhand" />
         <meta name="keywords" content="gauth, daal, namak, chawal, kaafal, pahadi, jhangora, product, uttrakhand, delivery, free" />
         <meta name="author" content="yogesh mamgain" />
-        <link rel="canonical" href="http://simdi.in" />
+        <link rel="canonical" href="https://simdi.in" />
         <meta property="og:title" content="SIMDI" />
         <meta property="og:description" content="simdi." />
-        <meta property="og:url" content="http://simdi.in" />
+        <meta property="og:url" content="https://simdi.in" />
         <meta property="og:type" content="website" />
       </Head>
       <main>
