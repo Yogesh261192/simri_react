@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { databases, storage } from '../appwriteConfig';
-import Header from '../components/Header';
-import Footer from '../components/footer';
-import { useCart } from '../components/CartContext';
+// import { databases, storage } from '../appwriteConfig';
+import { databases,storage } from '../../appwriteConfig';
+import Header from '../../components/Header';
+import Footer from '../../components/footer';
+import { useCart } from '../../components/CartContext';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Coming_Soon } from 'next/font/google';
+import { useRouter } from 'next/router';
 
 const DATABASE_ID = '6740474900354338e949';
 const COLLECTION_ID = '674047600025528835b3';
@@ -16,7 +18,11 @@ export default function AllProducts({ serverProducts }) {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const { cartItems, addToCart, updateQuantity } = useCart();
-
+ const router = useRouter(); // ✅ Use the useRouter hook
+  
+  const redirect = (path) => {
+    router.push(`/${path}`); // ✅ Redirect to the specified path
+  };
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -122,7 +128,11 @@ export default function AllProducts({ serverProducts }) {
                           alt={item.name}
                           width={500}
                           height={500}
-                          className="w-full h-full object-cover object-top"
+                          className="w-full h-full object-cover object-top cursor-pointer"
+                          onClick={()=>{
+                            const slug = item.name.toLowerCase().replace(/\s+/g, '-'); // e.g. "Mango Lokum" → "mango-lokum"
+  redirect(`products/${slug}`);
+                          }}
                         />
                       ) : (
                         <div className="flex items-center justify-center h-full text-gray-400">Image not available</div>
