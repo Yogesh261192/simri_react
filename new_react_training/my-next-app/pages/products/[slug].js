@@ -5,80 +5,108 @@ import Header from '../../components/Header';
 import Footer from '../../components/footer';
 import Image from 'next/image';
 import ShimmerLoader from '../../components/ShimmerProduct';
+import ProductHead from '../../components/ProductHead';
 
 const DATABASE_ID = '6740474900354338e949';
 const COLLECTION_ID = '674047600025528835b3';
 const BUCKET_ID = '6742e69c003e3ca0399e';
 
+// import { useState, useEffect } from 'react';
+// import { useRouter } from 'next/router';
+// import Image from 'next/image';
+// import ProductHead from './ProductHead';  // Adjust import path
+// import Header from './Header';             // Adjust import path
+// import Footer from './Footer';             // Adjust import path
+// import ShimmerLoader from './ShimmerLoader'; // Adjust import path
+
 const ProductDetailPage = () => {
- const router = useRouter();
-   const { slug } = router.query;
- 
-   const [product, setProduct] = useState(null);
-   const [imageUrl, setImageUrl] = useState('gauth');
-     const [expandedSection, setExpandedSection] = useState('description');
+  const router = useRouter();
+  const { slug } = router.query;
 
- 
-   useEffect(() => {
-     if (!slug) return;
- 
-     const fetchProduct = async () => {
-       try {
-         const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
-         const matched = res.documents.find(doc =>
-           doc.name.toLowerCase().replace(/\s+/g, '-') === slug
-         );
-         if (matched) {
-           setProduct(matched);
- 
-           // Find and set image
-           const imageRes = await storage.listFiles(BUCKET_ID);
-           const img = imageRes.files.find(file =>
-             file.name.toLowerCase().includes(matched.name.toLowerCase())
-           );
-           if (img) {
-             const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${img.$id}/view?project=673ebe09000b35b67d8b&mode=admin`;
-             setImageUrl(url);
-           }
-         }
-       } catch (err) {
-         console.error('Error fetching product:', err);
-       }
-     };
- 
-     fetchProduct();
-   }, [slug]);
+  const [product, setProduct] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+  const [expandedSection, setExpandedSection] = useState('description');
 
-  const getImageUrl = (imageId) => {
-    return storage.getFilePreview(BUCKET_ID, imageId);
+  // Prepare productDetail for SEO head tags safely
+  const productDetail = {
+    name: product?.name ?? 'Pahadi Product',
+    slug: product?.slug ?? slug ?? 'pahadi-product',
+    description: product?.description 
+      ? product.description.slice(0, 160)
+      : `Buy organic product real made with love and Himalayan ${product?.name ?? 'Pahadi Product'}`,
+    image: imageUrl || '',
   };
+
+  useEffect(() => {
+    if (!slug) return;
+
+    const fetchProduct = async () => {
+      try {
+        // Fetch all products
+        const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
+
+        // Find product matching slug
+        const matched = res.documents.find(doc =>
+          doc.name.toLowerCase().replace(/\s+/g, '-') === slug
+        );
+
+        if (matched) {
+          setProduct(matched);
+
+          // Fetch image related to the product
+          const imageRes = await storage.listFiles(BUCKET_ID);
+          const img = imageRes.files.find(file =>
+            file.name.toLowerCase().includes(matched.name.toLowerCase())
+          );
+
+          if (img) {
+            const url = `https://fra.cloud.appwrite.io/v1/storage/buckets/${BUCKET_ID}/files/${img.$id}/view?project=673ebe09000b35b67d8b&mode=admin`;
+            setImageUrl(url);
+          } else {
+            setImageUrl(''); // fallback if no image found
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err);
+      }
+    };
+
+    fetchProduct();
+  }, [slug]);
 
   const toggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
+  // Show loader until product is fetched
   if (!product) {
-    return (
-        <ShimmerLoader></ShimmerLoader>
-     
-    );
+    return <ShimmerLoader />;
   }
 
   return (
     <>
+      <ProductHead product={productDetail} />
+
       <Header />
+
       <div className="min-h-screen bg-gray-50 py-5">
         <div className="container mx-auto px-4 py-6 mt-4">
           {/* Image Section */}
           <div className="mb-8">
             <div className="relative h-[400px] w-full rounded-lg overflow-hidden bg-white shadow-md">
-              <Image
-                src={imageUrl}
-                alt={product.name}
-                layout="fill"
-                objectFit="cover"
-                objectPosition="top"
-              />
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  alt={product.name}
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="top"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full bg-gray-200 text-gray-400">
+                  Image not available
+                </div>
+              )}
             </div>
           </div>
 
@@ -94,21 +122,6 @@ const ProductDetailPage = () => {
                 <span className="text-gray-600">{product.rating || '4.8'} (124 reviews)</span>
               </div>
             </div>
-
-            {/* <div className="flex space-x-4 mt-6">
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium">
-                <i className="fas fa-shopping-cart mr-2"></i>
-                Add to Cart
-              </button>
-              <button className="border border-gray-300 bg-white text-gray-700 px-4 py-3 rounded-lg font-medium">
-                <i className="far fa-heart mr-2"></i>
-                Save
-              </button>
-              <button className="border border-gray-300 bg-white text-gray-700 px-4 py-3 rounded-lg font-medium">
-                <i className="fas fa-share-alt mr-2"></i>
-                Share
-              </button>
-            </div> */}
           </div>
 
           {/* Sections */}
@@ -134,26 +147,6 @@ const ProductDetailPage = () => {
                 </div>
               )}
             </div>
-
-            {/* Ingredients */}
-            {/* <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <button
-                onClick={() => toggleSection('ingredients')}
-                className="w-full px-6 py-4 flex justify-between items-center"
-              >
-                <h2 className="text-xl font-semibold text-gray-800">Ingredients</h2>
-                <i className={`fas ${expandedSection === 'ingredients' ? 'fa-chevron-up' : 'fa-chevron-down'} text-gray-500`}></i>
-              </button>
-              {expandedSection === 'ingredients' && (
-                <div className="px-6 py-4 border-t border-gray-100">
-                  <ul className="list-disc pl-5 text-gray-700">
-                    {(product.ingredients || []).map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div> */}
 
             {/* Nutritional Facts */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden ">
@@ -211,9 +204,12 @@ const ProductDetailPage = () => {
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );
 };
 
 export default ProductDetailPage;
+
+
