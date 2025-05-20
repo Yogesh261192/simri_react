@@ -1,7 +1,7 @@
 import React from 'react';
 import atul from "../public/assets/images/atul_rawat.png";
 import rakesh from "../public/assets/images/rakesh.png";
-import somesh from "../public/assets/images/somesh.png";
+import somesh from "../public/assets/images/mohit.jpg";
 import sourabh from "../public/assets/images/sourabh_2.png"
 
 const drivers = [

@@ -105,7 +105,7 @@ const OrderHistoryPage = () => {
       } catch (error) {
         console.error('Error listing files:', error);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
     fetchFiles();

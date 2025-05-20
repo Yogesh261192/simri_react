@@ -26,6 +26,7 @@ export default function Rides() {
     const { showToast } = useToast();
     const { user,setUser} = useUser();
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+    const [loading, setLoading]= useState(false)
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [directions, setDirections] = useState(null);
@@ -115,6 +116,7 @@ export default function Rides() {
   }
 
   const handleBooking = async () => {
+     setLoading(true)
     if(user){
       console.log("Proceeding to checkout:");
     // redirect('/checkout'); //
@@ -122,12 +124,14 @@ export default function Rides() {
     }
     else{
     setIsSignInOpen(true);
+     setLoading(false)
     return
     }
     if(currentScreen=="ride"){
       if (!pickup || !dropoff || !rideDate || !rideTime) {
       showToast({message:"Please fill in pickup, dropoff, date, and time.", type:"error"});
-      return;
+       setLoading(false)
+       return;
     }
 
     const mapElement = mapRef.current;
@@ -175,20 +179,24 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
       if (res.ok) {
         showToast({message:"Booking confirmed, please check email for more info", type:"success"});
         clearData()
+         setLoading(false)
       } else {
         showToast({message:"Booking failed", type:"error"});
         clearData()
+         setLoading(false)
 
       }
     } catch (err) {
       showToast({message:err, type:"error"});
       clearData()
+      setLoading(false)
       console.error("Error sending booking:", err);
     }
     }
     else{
        if (!pickup || !dropoff || !rideDate || !rideTime || !weight) {
       showToast({message:"Please fill in pickup, dropoff,weight, date, and time.", type:"error"});
+       setLoading(false)
       return;
     }
     const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
@@ -230,13 +238,16 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
       if (res.ok) {
      showToast({message:"Booking confirmed, please check email for more info", type:"success"});
         clearData()
+         setLoading(false)
       } else {
          showToast({message:"Booking failed", type:"error"});
         clearData()
+         setLoading(false)
       }
     } catch (err) {
       showToast({message:err, type:"error"});
       clearData()
+       setLoading(false)
       console.error("Error sending booking:", err);
     }
 
@@ -445,7 +456,7 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
 
               {/* Ride Summary */}
 
-              {currentScreen === 'ride' && (
+              {/* {currentScreen === 'ride' && (
 <div className="bg-[#4A90A0]/10 rounded-lg p-4 my-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                 <div>
                   <p className="text-sm text-gray-700">Estimated Price</p>
@@ -459,7 +470,7 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
                   <p className="text-sm text-gray-700">Distance</p>
                   <p className="text-lg font-semibold">{distance || "---"}</p>
                 </div>
-              </div>)}
+              </div>)} */}
                {currentScreen === 'delivery' && (
     <>
       {/* 🔧 Approximate Weight input */}
@@ -488,13 +499,14 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
 
               {/* Book Button */}
               <button
+                disabled={loading}
                 onClick={(e) => {
                   e.preventDefault();
                   handleBooking();
                 }}
                 className="w-full bg-[#4A90A0] hover:bg-[#4A90A0]/90 text-white py-3 rounded-lg font-medium"
               >
-                {currentText}
+                {loading?"Confirming":currentText}
               </button>
             </div>
           </div>

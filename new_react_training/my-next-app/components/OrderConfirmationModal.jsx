@@ -12,6 +12,7 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
       pincode:'',
       alternatePhone:''
     });
+    const [loading,setLoading]= useState(false)
       const { showToast } = useToast();
   if (!isOpen) return null;
 
@@ -23,21 +24,24 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
     cartItems,
     updateQuantity,
     removeFromCart,
-    getTotal
+    getTotal,
+    clearCart
   } = useCart();
   console.log(cartItems, getTotal)
   let total= getTotal();
   // console.log(total)
   async function handleConfirm(e){
+    setLoading(true)
     e.preventDefault();
     if(formData.address==""|| formData.locality==""|| formData.pincode==""|| formData.alternatePhone==""){
       showToast({message:"Please fill in all the details", type:"error"})
+      setLoading(false)
       return 
     }
     console.log(cartItems, 'caritems')
      const user = await account.get(); // fetch user details
          console.log(user)
-        
+          
        let response = await fetch("https://simdi.in/confirm_order", {
         method: 'POST',
         headers: {
@@ -50,6 +54,7 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
               details: formData  
             })
       });
+      
       let db= await databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
         {
            order: JSON.stringify(cartItems),
@@ -62,8 +67,11 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
 
         }
       )
+         setLoading(false)
+         clearCart()
+       
      
-      console.log(response, 'response')
+      // console.log(response, 'response')
              showToast({message:"Please check your email for details", type:"success"})
               onClose(false)
   }
@@ -134,10 +142,11 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-[#2C5530] text-white py-3 rounded-lg font-medium"
             onClick={handleConfirm}
           >
-            Confirm Order
+            {loading?"Placing Order...":"Confirm Order"}
           </button>
         </form>
       </div>
