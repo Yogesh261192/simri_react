@@ -1,5 +1,7 @@
-/** @type {import('next-sitemap').IConfig} */
+/*/** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://simdi.in',
-  generateRobotsTxt: true, // Will auto-create correct robots.txt
-}
+  generateRobotsTxt: true,
+  sitemapSize: 5000,
+  exclude: ['/emailverification', '/layout', '/product-detail'], // exclude internal pages
+};
