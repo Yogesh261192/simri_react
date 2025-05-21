@@ -140,7 +140,7 @@ export default function AllProducts({ serverProducts }) {
                     </div>
                     <div className="p-4">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-medium text-gray-800">{item.name}</h3>
+                        <h3 className="font-medium text-gray-800">{item.alias_name}</h3>
                         <span className="bg-[#2C5530]/10 text-[#2C5530] text-xs px-2 py-1 rounded-full">Organic</span>
                       </div>
                       <div className="flex justify-between items-center">

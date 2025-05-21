@@ -75,6 +75,7 @@ export default function Rides() {
 
   useEffect(() => {
     if (pickupLatLng && dropoffLatLng && window.google) {
+      console.log(dropoffLatLng, 'drop', pickupLatLng, "pick")
       const service = new window.google.maps.DirectionsService();
       service.route(
         {
@@ -90,6 +91,7 @@ export default function Rides() {
             setDuration(leg.duration.text);
           } else {
             console.error("Directions request failed:", status);
+          // showToast({message:"Unable to fetch location please select exact or nearest loaction.", type:"error"});
           }
         }
       );
@@ -117,10 +119,14 @@ export default function Rides() {
 
   const handleBooking = async () => {
      setLoading(true)
+     if(!directions){
+      showToast({message:"Unable to fetch location please select exact or nearest loaction.", type:"error"});
+          setLoading(false)
+ 
+    }
+ 
     if(user){
       console.log("Proceeding to checkout:");
-    // redirect('/checkout'); //
-    // setIsOpen(true)
     }
     else{
     setIsSignInOpen(true);
@@ -137,6 +143,7 @@ export default function Rides() {
     const mapElement = mapRef.current;
     const canvas = await html2canvas(mapElement);
     const imageData = canvas.toDataURL("image/png");
+
 const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
  const formData = {
       pickup,
@@ -199,7 +206,7 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
        setLoading(false)
       return;
     }
-    const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
+    const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0]?.overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
 
     const formData = {
       pickup,

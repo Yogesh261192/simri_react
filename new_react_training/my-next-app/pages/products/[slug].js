@@ -79,7 +79,7 @@ const ProductDetailPage = () => {
   };
 
   // Show loader until product is fetched
-  if (!product) {
+  if (!imageUrl) {
     return <ShimmerLoader />;
   }
 
@@ -113,13 +113,13 @@ const ProductDetailPage = () => {
           {/* Title and Price */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-            <p className="text-xl text-gray-600 mb-4">{product.localName}</p>
+            <p className="text-xl text-gray-600 mb-4">{product.alias_name}</p>
 
             <div className="flex justify-between items-center mb-4">
               <span className="text-2xl font-semibold text-indigo-700">₹{product.price}</span>
               <div className="flex items-center">
                 <i className="fas fa-star text-yellow-400 mr-1"></i>
-                <span className="text-gray-600">{product.rating || '4.8'} (124 reviews)</span>
+                <span className="text-gray-600">{product.rating || '4.8'} ({product.review} reviews)</span>
               </div>
             </div>
           </div>
@@ -138,11 +138,11 @@ const ProductDetailPage = () => {
               {expandedSection === 'description' && (
                 <div className="px-6 py-4 border-t border-gray-100">
                   <p className="text-gray-700 mb-4 leading-relaxed">
-                    This is a rich and flavorful delicacy loved across generations. Perfectly layered, sweetened just right, and made with the finest ingredients.
+                    {product.description}
                   </p>
                   <h3 className="font-semibold text-gray-800 mt-4 mb-2">History & Cultural Significance</h3>
                   <p className="text-gray-700 leading-relaxed">
-                    This dessert has deep roots in cultural celebrations and festive moments. Often served during weddings, festivals, and religious occasions.
+                    {product.history}
                   </p>
                 </div>
               )}
@@ -193,10 +193,10 @@ const ProductDetailPage = () => {
               {expandedSection === 'storage' && (
                 <div className="px-6 py-4 border-t border-gray-100">
                   <p className="mb-4 text-gray-700">
-                    Store in an airtight container in a cool, dry place. Best consumed within 7 days.
-                  </p>
+                    {product.storage}
+                    </p>
                   <p className="text-gray-700">
-                    Serve at room temperature. For enhanced flavor, warm slightly before serving.
+                    {product.preparation}
                   </p>
                 </div>
               )}
