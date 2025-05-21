@@ -117,7 +117,14 @@ const [orders, setOrders]= useState(false)
                 </button>
               )}
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  if(user){
+                    setIsModalOpen(true)
+                  }
+                  else{
+                    setIsSignInOpen(true)
+                  }
+                }}
                 className="relative text-gray-600 hover:text-[#2C5530] cursor-pointer"
               >
                 <i className="fas fa-shopping-cart text-xl"></i>

@@ -115,7 +115,7 @@ export default function AllProducts({ serverProducts }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {items.map((item) => {
-                console.log(item, 'iteem')
+                // console.log(item, 'iteem')
                 const filteredImage = files.find((file) => file.name.toLowerCase().includes(item.name.toLowerCase()));
                 const cartItem = cartItems.find((i) => i.$id === item.$id);
 

@@ -12,6 +12,6 @@ const databases = new Databases(client);
 const storage = new Storage(client);
 const account = new Account(client);
 // console.log(databases)
-console.log(account)
+console.log(account, 'ajajajajjj')
 
 export { client, databases, ID, Query, storage, account };
