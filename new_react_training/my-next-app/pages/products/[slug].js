@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { databases, storage } from '../../appwriteConfig';
 import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Footer from '../../components/footer';
 import Image from 'next/image';
 import ShimmerLoader from '../../components/ShimmerProduct';
 import ProductHead from '../../components/ProductHead';
