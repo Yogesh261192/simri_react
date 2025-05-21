@@ -112,7 +112,7 @@ const [orders, setOrders]= useState(false)
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
               {orders && (
-                <button onClick={() => redirect('history')} className="mr-2 relative text-gray-600 hover:text-[#2C5530] cursor-pointer" aria-label="Order History">
+                <button onClick={() => redirect('/history')} className="mr-2 relative text-gray-600 hover:text-[#2C5530] cursor-pointer" aria-label="Order History">
                   <i className="fas fa-history text-gray-600"></i>
                 </button>
               )}
