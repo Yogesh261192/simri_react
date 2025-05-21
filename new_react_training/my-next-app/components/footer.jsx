@@ -39,9 +39,18 @@ function Footer(){
         <div>
           <h4 className="text-lg font-semibold mb-6">Services</h4>
           <ul className="space-y-3">
-            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={() => redirect('products')}>Local Marketplace</a></li>
-            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={() => redirect('rides')}>Intercity Rides</a></li>
-            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={() => redirect('rides')}>Package Delivery</a></li>
+            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={(e) => {
+              e.preventDefault();
+              redirect('products');
+            }}>Local Marketplace</a></li>
+            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={(e) => {
+              e.preventDefault();
+              redirect('rides')
+            }}>Intercity Rides</a></li>
+            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={(e) => {
+              e.preventDefault();
+              redirect('rides')
+            }}>Package Delivery</a></li>
             {/* <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer">Business Solutions</a></li>
             <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer">Sustainability Programs</a></li> */}
           </ul>
@@ -51,8 +60,14 @@ function Footer(){
         <div>
           <h4 className="text-lg font-semibold mb-6">Company</h4>
           <ul className="space-y-3">
-            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer"  onClick={() => redirect('about')}>About Us</a></li>
-            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={() => redirect('mission')}>Our Mission</a></li>
+            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer"  onClick={(e)=>{
+              e.preventDefault();
+redirect('about');
+            }}>About Us</a></li>
+            <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer" onClick={(e) => {
+              e.preventDefault();
+              redirect('mission')
+            }}>Our Mission</a></li>
             {/* <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer">Careers</a></li>
             <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer">Press</a></li>
             <li><a href="#" className="text-gray-300 hover:text-white cursor-pointer">Contact Us</a></li> */}

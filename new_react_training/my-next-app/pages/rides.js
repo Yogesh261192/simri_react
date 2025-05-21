@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { account,databases } from "../appwriteConfig";
+import { account, databases } from "../appwriteConfig";
 import Header from "../components/Header";
 import Footer from "../components/footer";
 import DriverList from "../components/Driver";
@@ -16,17 +16,17 @@ import {
 } from "@react-google-maps/api";
 import PlaceInput from "../components/PlaceInput";
 import html2canvas from "html2canvas";
-const order_id= "6740474900354338e949"
+const order_id = "6740474900354338e949"
 
 const defaultCenter = { lat: 28.6139, lng: 77.209 };
 const containerStyle = { width: "100%", height: "400px" };
 const libraries = ["places"];
 
 export default function Rides() {
-    const { showToast } = useToast();
-    const { user,setUser} = useUser();
-    const [isSignUpOpen, setIsSignUpOpen] = useState(false);
-    const [loading, setLoading]= useState(false)
+  const { showToast } = useToast();
+  const { user, setUser } = useUser();
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [directions, setDirections] = useState(null);
@@ -38,11 +38,11 @@ export default function Rides() {
   const [currentText, setCurrentText] = useState("Book Now");
   const [rideDate, setRideDate] = useState("");
   const [rideTime, setRideTime] = useState("");
-  const [weight, setWeight ]= useState("");
+  const [weight, setWeight] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
 
   const mapRef = useRef(null);
-  function clearData(){
+  function clearData() {
     setPickup("");
     setDropoff("");
     setDirections("");
@@ -91,25 +91,25 @@ export default function Rides() {
             setDuration(leg.duration.text);
           } else {
             console.error("Directions request failed:", status);
-          // showToast({message:"Unable to fetch location please select exact or nearest loaction.", type:"error"});
+            // showToast({message:"Unable to fetch location please select exact or nearest loaction.", type:"error"});
           }
         }
       );
     }
   }, [pickupLatLng, dropoffLatLng]);
-   const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-   async function handleSignIn(){
+  async function handleSignIn() {
     try {
-      let user= await account.createEmailPasswordSession(formData.email, formData.password);
-    console.log(user)
-    const userData = await account.get(); // Fetch user info
-    console.log(userData);
-    setUser(userData);
-    showToast({ message: 'Login success!', type: 'success' })
-    setIsSignInOpen(false);
+      let user = await account.createEmailPasswordSession(formData.email, formData.password);
+      console.log(user)
+      const userData = await account.get(); // Fetch user info
+      console.log(userData);
+      setUser(userData);
+      showToast({ message: 'Login success!', type: 'success' })
+      setIsSignInOpen(false);
     } catch (error) {
       console.log(error.message)
       showToast({ message: error.message, type: 'error' })
@@ -118,145 +118,145 @@ export default function Rides() {
   }
 
   const handleBooking = async () => {
-     setLoading(true)
-     if(!directions){
-      showToast({message:"Unable to fetch location please select exact or nearest loaction.", type:"error"});
-          setLoading(false)
- 
+    setLoading(true)
+    if (!directions) {
+      showToast({ message: "Unable to fetch location please select exact or nearest loaction.", type: "error" });
+      setLoading(false)
+
     }
- 
-    if(user){
+
+    if (user) {
       console.log("Proceeding to checkout:");
     }
-    else{
-    setIsSignInOpen(true);
-     setLoading(false)
-    return
-    }
-    if(currentScreen=="ride"){
-      if (!pickup || !dropoff || !rideDate || !rideTime) {
-      showToast({message:"Please fill in pickup, dropoff, date, and time.", type:"error"});
-       setLoading(false)
-       return;
-    }
-
-    const mapElement = mapRef.current;
-    const canvas = await html2canvas(mapElement);
-    const imageData = canvas.toDataURL("image/png");
-
-const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
- const formData = {
-      pickup,
-      dropoff,
-      rideDate,
-      rideTime,
-      staticMapUrl,
-      distance,
-      duration,
-      userName: user.name,
-      email: user.email
-    };
-       databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
-            {
-               order: JSON.stringify({
-                pickup,
-                dropoff,
-                rideDate,
-                staticMapUrl
-               }),
-        name: user.name,
-        phone: user.phone,
-        date: new Date().toISOString(), // or specific ISO string
-        email: user.email,
-        type: "ride",
-        status: "pending"
-    
-            }
-          )
-   
-    
-
-    try {
-      const res = await fetch("https://simdi.in/confirm_booking", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        showToast({message:"Booking confirmed, please check email for more info", type:"success"});
-        clearData()
-         setLoading(false)
-      } else {
-        showToast({message:"Booking failed", type:"error"});
-        clearData()
-         setLoading(false)
-
-      }
-    } catch (err) {
-      showToast({message:err, type:"error"});
-      clearData()
+    else {
+      setIsSignInOpen(true);
       setLoading(false)
-      console.error("Error sending booking:", err);
+      return
     }
-    }
-    else{
-       if (!pickup || !dropoff || !rideDate || !rideTime || !weight) {
-      showToast({message:"Please fill in pickup, dropoff,weight, date, and time.", type:"error"});
-       setLoading(false)
-      return;
-    }
-    const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0]?.overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
-
-    const formData = {
-      pickup,
-      dropoff,
-      rideDate,
-      rideTime,
-      staticMapUrl,
-      weight,
-      userName: user.name,
-      email: user.email
-    };
-   databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
-            {
-               order: JSON.stringify({
-                pickup,
-                dropoff,
-                rideDate,
-                staticMapUrl
-               }),
-        name: user.name,
-        phone: user.phone,
-        date: new Date().toISOString(), // or specific ISO string
-        email: user.email,
-        type: "delivery",
-        status: "pending"
-    
-            }
-          )
-     try {
-      const res = await fetch(" https://simdi.in/confirm_delivery", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (res.ok) {
-     showToast({message:"Booking confirmed, please check email for more info", type:"success"});
-        clearData()
-         setLoading(false)
-      } else {
-         showToast({message:"Booking failed", type:"error"});
-        clearData()
-         setLoading(false)
+    if (currentScreen == "ride") {
+      if (!pickup || !dropoff || !rideDate || !rideTime) {
+        showToast({ message: "Please fill in pickup, dropoff, date, and time.", type: "error" });
+        setLoading(false)
+        return;
       }
-    } catch (err) {
-      showToast({message:err, type:"error"});
-      clearData()
-       setLoading(false)
-      console.error("Error sending booking:", err);
+
+      const mapElement = mapRef.current;
+      const canvas = await html2canvas(mapElement);
+      const imageData = canvas.toDataURL("image/png");
+
+      const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0].overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
+      const formData = {
+        pickup,
+        dropoff,
+        rideDate,
+        rideTime,
+        staticMapUrl,
+        distance,
+        duration,
+        userName: user.name,
+        email: user.email
+      };
+      databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
+        {
+          order: JSON.stringify({
+            pickup,
+            dropoff,
+            rideDate,
+            staticMapUrl
+          }),
+          name: user.name,
+          phone: user.phone,
+          date: new Date().toISOString(), // or specific ISO string
+          email: user.email,
+          type: "ride",
+          status: "pending"
+
+        }
+      )
+
+
+
+      try {
+        const res = await fetch("https://simdi.in/confirm_booking", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showToast({ message: "Booking confirmed, please check email for more info", type: "success" });
+          clearData()
+          setLoading(false)
+        } else {
+          showToast({ message: "Booking failed", type: "error" });
+          clearData()
+          setLoading(false)
+
+        }
+      } catch (err) {
+        showToast({ message: err, type: "error" });
+        clearData()
+        setLoading(false)
+        console.error("Error sending booking:", err);
+      }
     }
+    else {
+      if (!pickup || !dropoff || !rideDate || !rideTime || !weight) {
+        showToast({ message: "Please fill in pickup, dropoff,weight, date, and time.", type: "error" });
+        setLoading(false)
+        return;
+      }
+      const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x400&path=enc:${directions.routes[0]?.overview_polyline?.points}&markers=color:green|label:P|${pickupLatLng.lat},${pickupLatLng.lng}&markers=color:red|label:D|${dropoffLatLng.lat},${dropoffLatLng.lng}&key=AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM`;
+
+      const formData = {
+        pickup,
+        dropoff,
+        rideDate,
+        rideTime,
+        staticMapUrl,
+        weight,
+        userName: user.name,
+        email: user.email
+      };
+      databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
+        {
+          order: JSON.stringify({
+            pickup,
+            dropoff,
+            rideDate,
+            staticMapUrl
+          }),
+          name: user.name,
+          phone: user.phone,
+          date: new Date().toISOString(), // or specific ISO string
+          email: user.email,
+          type: "delivery",
+          status: "pending"
+
+        }
+      )
+      try {
+        const res = await fetch(" https://simdi.in/confirm_delivery", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showToast({ message: "Booking confirmed, please check email for more info", type: "success" });
+          clearData()
+          setLoading(false)
+        } else {
+          showToast({ message: "Booking failed", type: "error" });
+          clearData()
+          setLoading(false)
+        }
+      } catch (err) {
+        showToast({ message: err, type: "error" });
+        clearData()
+        setLoading(false)
+        console.error("Error sending booking:", err);
+      }
 
     }
   };
@@ -265,7 +265,7 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
     setCurrentScreen(param);
     setCurrentText(param === "ride" ? "Book Now" : "Deliver Now");
   };
-  function handleChange(e){
+  function handleChange(e) {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   }
@@ -273,72 +273,95 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
   return (
     <>
       <Head>
-  <title>Book Ride or Delivery to the Himalayas – SIMDI</title>
-  <meta name="description" content="Book reliable rides or deliveries from Delhi to Uttarakhand and Himachal Pradesh. Eco-friendly, fast and safe transportation to the Himalayas." />
-  <meta name="keywords" content="ride booking, delivery service, Delhi to Himalayas, Uttarakhand, Himachal Pradesh, eco-friendly travel, Himalayan delivery, pahadi transport, SIMDI ride, SIMDI delivery" />
-  <meta name="author" content="Yogesh Mamgain" />
-  <link rel="canonical" href="https://simdi.in/rides" />
-  <meta property="og:title" content="Book Ride or Delivery to the Himalayas – SIMDI" />
-  <meta property="og:description" content="Plan your ride or delivery from Delhi to the Himalayas with SIMDI. Serving Uttarakhand & Himachal Pradesh with sustainable transport." />
-  <meta property="og:url" content="https://simdi.in/rides" />
-  <meta property="og:type" content="website" />
-</Head>
+        <title>Book Ride or Delivery to the Himalayas – SIMDI</title>
+        <meta name="description" content="Book reliable rides or deliveries from Delhi to Uttarakhand and Himachal Pradesh. Eco-friendly, fast and safe transportation to the Himalayas." />
+        <meta name="keywords" content="ride booking, delivery service, Delhi to Himalayas, Uttarakhand, Himachal Pradesh, eco-friendly travel, Himalayan delivery, pahadi transport, SIMDI ride, SIMDI delivery" />
+        <meta name="author" content="Yogesh Mamgain" />
+        <link rel="canonical" href="https://simdi.in/rides" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:title" content="Book Ride or Delivery to the Himalayas – SIMDI" />
+        <meta property="og:description" content="Plan your ride or delivery from Delhi to the Himalayas with SIMDI. Serving Uttarakhand & Himachal Pradesh with sustainable transport." />
+        <meta property="og:url" content="https://simdi.in/rides" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://simdi.in/assets/images/intercity_rides.jpg" />
+        <meta property="og:image:alt" content="A Simdi ride vehicle heading toward the Himalayas" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Book Ride or Delivery to the Himalayas – SIMDI" />
+        <meta name="twitter:description" content="Plan your ride or delivery from Delhi to the Himalayas with SIMDI. Serving Uttarakhand & Himachal Pradesh with sustainable transport." />
+        <meta name="twitter:image" content="https://simdi.in/assets/images/intercity_rides.jpg" />
+        <script type="application/ld+json">
+          {`
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Book Ride or Delivery to the Himalayas – SIMDI",
+  "description": "Plan your ride or delivery from Delhi to the Himalayas with SIMDI. Serving Uttarakhand & Himachal Pradesh with sustainable transport.",
+  "url": "https://simdi.in/rides",
+  "image": "https://simdi.in/assets/images/intercity_rides.jpg"
+}
+`}
+        </script>
+
+      </Head>
 
 
       <main>
         <Header />
-         {isSignInOpen && (
-        <div className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white w-full max-w-md rounded-xl p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold">Sign In</h2>
-              <button
-                onClick={() => setIsSignInOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
-                  placeholder="Enter your email"
-                  onChange={handleChange} value={formData.email}
-                  name="email"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                <input
-                  type="password"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
-                  placeholder="Enter your password"
-                  onChange={handleChange} value={formData.password}
-                  name="password"
-                />
+        {isSignInOpen && (
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 flex items-center justify-center">
+            <div className="bg-white w-full max-w-md rounded-xl p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-semibold">Sign In</h2>
+                <button
+                  onClick={() => setIsSignInOpen(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
               </div>
 
-              <div className="flex items-center justify-between">
-                <label className="flex items-center">
-                  <input type="checkbox" className="rounded text-[#2C5530] focus:ring-[#2C5530]" />
-                  <span className="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-                <a href="#" className="text-sm text-[#2C5530] hover:text-[#2C5530]/80">Forgot password?</a>
-              </div>
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
+                    placeholder="Enter your email"
+                    onChange={handleChange} value={formData.email}
+                    name="email"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-[#2C5530]"
+                    placeholder="Enter your password"
+                    onChange={handleChange} value={formData.password}
+                    name="password"
+                  />
+                </div>
 
-              <button
-                type="button"
-                onClick={handleSignIn}
-                className="w-full bg-[#2C5530] hover:bg-[#2C5530]/90 text-white py-3 rounded-lg font-medium"
-              >
-                Sign In
-              </button>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center">
+                    <input type="checkbox" className="rounded text-[#2C5530] focus:ring-[#2C5530]" />
+                    <span className="ml-2 text-sm text-gray-600">Remember me</span>
+                  </label>
+                  <a href="#" className="text-sm text-[#2C5530] hover:text-[#2C5530]/80">Forgot password?</a>
+                </div>
 
-              {/* <div className="relative my-6">
+                <button
+                  type="button"
+                  onClick={handleSignIn}
+                  className="w-full bg-[#2C5530] hover:bg-[#2C5530]/90 text-white py-3 rounded-lg font-medium"
+                >
+                  Sign In
+                </button>
+
+                {/* <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
@@ -364,36 +387,36 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
                 </button>
               </div> */}
 
-              <p className="text-center text-sm text-gray-600 mt-6">
-                Dont have an account?{" "}
-                <a href="#" className="text-[#2C5530] hover:text-[#2C5530]/80 font-medium"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setIsSignInOpen(false);
-                  setIsSignUpOpen(true);
-                  }}>
-                  Sign up
-                </a>
-              </p>
-            </form>
+                <p className="text-center text-sm text-gray-600 mt-6">
+                  Dont have an account?{" "}
+                  <a href="#" className="text-[#2C5530] hover:text-[#2C5530]/80 font-medium"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setIsSignInOpen(false);
+                      setIsSignUpOpen(true);
+                    }}>
+                    Sign up
+                  </a>
+                </p>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-            {isSignUpOpen && <SignUpModal setIsSignUpOpen={setIsSignUpOpen} />}
+        )}
+        {isSignUpOpen && <SignUpModal setIsSignUpOpen={setIsSignUpOpen} />}
 
         <section className="py-20 bg-[#F5F7F6]">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-  <h2 className="text-3xl font-bold text-gray-800 mb-4">
-    Book a Ride or Schedule a Delivery to the Himalayas
-  </h2>
-  <p className="text-gray-600 max-w-2xl mx-auto">
-    Fast, safe, and eco-conscious transportation and delivery services connecting <strong>Delhi</strong> with towns and villages across the Himalayan states.
-  </p>
-  <p className="text-gray-700 max-w-2xl mx-auto text-lg font-semibold mt-2">
-    🛣️ Currently operating from <span className="text-[#4A90A0] font-bold">Delhi</span> to <span className="text-[#4A90A0] font-bold">Uttarakhand</span> and <span className="text-[#4A90A0] font-bold">Himachal Pradesh</span>
-  </p>
-</div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                Book a Ride or Schedule a Delivery to the Himalayas
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Fast, safe, and eco-conscious transportation and delivery services connecting <strong>Delhi</strong> with towns and villages across the Himalayan states.
+              </p>
+              <p className="text-gray-700 max-w-2xl mx-auto text-lg font-semibold mt-2">
+                🛣️ Currently operating from <span className="text-[#4A90A0] font-bold">Delhi</span> to <span className="text-[#4A90A0] font-bold">Uttarakhand</span> and <span className="text-[#4A90A0] font-bold">Himachal Pradesh</span>
+              </p>
+            </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
               {/* Buttons */}
@@ -415,7 +438,7 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
               {/* Map */}
               <div ref={mapRef}>
                 <LoadScript
-                
+
                   googleMapsApiKey="AIzaSyAopathNjAm8ycAgsVLkJ-no21SN6BMSTM"
                   libraries={libraries}
                 >
@@ -478,31 +501,31 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
                   <p className="text-lg font-semibold">{distance || "---"}</p>
                 </div>
               </div>)} */}
-               {currentScreen === 'delivery' && (
-    <>
-      {/* 🔧 Approximate Weight input */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Item Weight (approx)</label>
-        <input
-          type="number"
-          placeholder="e.g. 5(all weight in kg)"
-          value={weight}
-          onChange={(e) => setWeight(e.target.value)}
-          className="w-full py-3 px-4 rounded-lg bg-[#F5F7F6] border-none text-sm focus:outline-none focus:ring-2 focus:ring-[#4A90A0]/30"
-        />
-      </div>
+              {currentScreen === 'delivery' && (
+                <>
+                  {/* 🔧 Approximate Weight input */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Item Weight (approx)</label>
+                    <input
+                      type="number"
+                      placeholder="e.g. 5(all weight in kg)"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      className="w-full py-3 px-4 rounded-lg bg-[#F5F7F6] border-none text-sm focus:outline-none focus:ring-2 focus:ring-[#4A90A0]/30"
+                    />
+                  </div>
 
-      {/* 🔧 Handle with Care checkbox */}
-      <div className="flex items-start space-x-2 mt-2">
-        <input
-          type="checkbox"
-          id="handleWithCare"
-          className="mt-1"
-        />
-        <label htmlFor="handleWithCare" className="text-sm text-gray-700">Handle with care</label>
-      </div>
-    </>
-  )}
+                  {/* 🔧 Handle with Care checkbox */}
+                  <div className="flex items-start space-x-2 mt-2">
+                    <input
+                      type="checkbox"
+                      id="handleWithCare"
+                      className="mt-1"
+                    />
+                    <label htmlFor="handleWithCare" className="text-sm text-gray-700">Handle with care</label>
+                  </div>
+                </>
+              )}
 
               {/* Book Button */}
               <button
@@ -513,7 +536,7 @@ const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x40
                 }}
                 className="w-full bg-[#4A90A0] hover:bg-[#4A90A0]/90 text-white py-3 rounded-lg font-medium"
               >
-                {loading?"Confirming":currentText}
+                {loading ? "Confirming" : currentText}
               </button>
             </div>
           </div>

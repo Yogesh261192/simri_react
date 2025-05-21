@@ -76,8 +76,8 @@ export default function AllProducts({ serverProducts }) {
             "@context": "https://schema.org",
             "@type": "Store",
             name: "Simdi",
-            url: "https://www.simdi.in",
-            image: "https://www.simdi.in/simdi_logo.png",
+            url: "https://www.simdi.in/products",
+            image: "https://simdi.in/assets/images/products.jpg",
             description: "Buy authentic Pahadi and Uttarakhand products online",
             sameAs: [
               "https://www.instagram.com/yoursimdi/",

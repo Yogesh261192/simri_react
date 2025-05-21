@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/footer";
 import { useState, useEffect } from 'react';
 import mission_image from '../public/assets/images/mission_main.jpg'
+import Head from 'next/head';
 
 
 export default function OurMission() {
@@ -53,7 +54,48 @@ export default function OurMission() {
 
   return (
     <>
-    
+    <Head>
+  <title>Our Mission – Empowering Himalayan Villages | SIMDI</title>
+  <meta 
+    name="description" 
+    content="Discover SIMDI's mission to create jobs, empower women, and promote sustainable development in Uttarakhand and Himachal Pradesh villages." 
+  />
+  <meta 
+    name="keywords" 
+    content="sustainable development, women empowerment, job creation, Uttarakhand, Himachal, rural transformation, SIMDI mission, pahadi communities" 
+  />
+  <meta name="author" content="Yogesh Mamgain" />
+  <link rel="canonical" href="https://simdi.in/mission" />
+
+  {/* Open Graph (Facebook, LinkedIn, etc.) */}
+  <meta property="og:title" content="Our Mission – Empowering Himalayan Villages | SIMDI" />
+  <meta property="og:description" content="Join SIMDI's mission to build sustainable livelihoods, empower women, and digitally connect mountain communities." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://simdi.in/mission" />
+  <meta property="og:image" content="https://simdi.in/assets/images/mission_main.jpg" /> 
+  <meta property="og:image:alt" content="Women working in Uttarakhand with SIMDI support" />
+
+  {/* Twitter Card */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Our Mission – Empowering Himalayan Villages | SIMDI" />
+  <meta name="twitter:description" content="Discover how SIMDI is creating opportunities in remote Himalayan villages." />
+  <meta name="twitter:image" content="https://simdi.in/assets/images/mission_main.jpg" />
+  <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Store",
+            name: "Simdi",
+            url: "https://www.simdi.in/mission",
+            image: "https://simdi.in/assets/images/mission_main.jpg",
+            description: "Buy authentic Pahadi and Uttarakhand products online",
+            sameAs: [
+              "https://www.instagram.com/yoursimdi/",
+              "https://www.facebook.com/Yoursimdi"
+            ]
+          })}
+        </script>
+</Head>
+
     <Header></Header>
     <div className="mission-content p-2">
             {/* Vision Banner */}

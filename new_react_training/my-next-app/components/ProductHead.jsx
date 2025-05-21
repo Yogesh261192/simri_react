@@ -51,6 +51,20 @@ export default function ProductHead({ product }) {
       {product.image && (
         <meta name="twitter:image" content={product.image.url || product.image} />
       )}
+       <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "about",
+            name: "Simdi",
+            url: `https://www.simdi.in/${product.name}`,
+            image: product.image.url || product.image,
+            description: "Buy authentic Pahadi and Uttarakhand products online",
+            sameAs: [
+              "https://www.instagram.com/yoursimdi/",
+              "https://www.facebook.com/Yoursimdi"
+            ]
+          })}
+        </script>
     </Head>
   );
 }

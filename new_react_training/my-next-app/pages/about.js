@@ -4,6 +4,7 @@ import Footer from "../components/footer";
 import rides from '../public/assets/images/village-women.jpg';
 import mahila_madal from '../public/assets/images/mahila_mandal.jpg'
 import panorama from '../public/assets/images/panorama.jpg'
+import Head from 'next/head';
 
 // import Image from 'next/image';
 // import delivery_services from '../public/assets/images/delivery_services.jpg';
@@ -11,6 +12,40 @@ import panorama from '../public/assets/images/panorama.jpg'
 export default function AboutUs() {
   return (
     <>
+    <Head>
+        <title>About Us | Empowering Uttarakhand Villages</title>
+        <meta
+          name="description"
+          content="Discover our journey of empowering mountain communities in Uttarakhand through organic farming, women-led collectives, and technology integration."
+        />
+        <meta
+          name="keywords"
+          content="Uttarakhand, Mahila Mandal, organic farming, Pahadi, women empowerment, rural development, ghost villages"
+        />
+        <meta name="author" content="SIMDI" />
+        <meta property="og:title" content="Empowering Uttarakhand Villages | Our Story" />
+        <meta
+          property="og:description"
+          content="Learn how we are reviving ghost villages by creating local livelihoods with the help of Mahila Mandals and sustainable practices."
+        />
+        <meta property="og:image" content={panorama.src} />
+        <meta property="og:type" content="website" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "about",
+            name: "Simdi",
+            url: "https://www.simdi.in/about",
+            image: "https://simdi.in/assets/images/panorama.jpg",
+            description: "Buy authentic Pahadi and Uttarakhand products online",
+            sameAs: [
+              "https://www.instagram.com/yoursimdi/",
+              "https://www.facebook.com/Yoursimdi"
+            ]
+          })}
+        </script>
+      </Head>
     <Header></Header>
       <div className="about-content p-2">
             {/* Hero Section */}
