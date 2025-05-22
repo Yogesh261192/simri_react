@@ -10,23 +10,23 @@ const DATABASE_ID = '6740474900354338e949';
 const COLLECTION_ID = '674047600025528835b3';
 const BUCKET_ID = '6742e69c003e3ca0399e';
 
-export async function getStaticPaths() {
-  try {
-    const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
-    const paths = res.documents.map(doc => ({
-      params: {
-        slug: doc.name.toLowerCase().replace(/\s+/g, '-'),
-      },
-    }));
+// export async function getStaticPaths() {
+//   try {
+//     const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
+//     const paths = res.documents.map(doc => ({
+//       params: {
+//         slug: doc.name.toLowerCase().replace(/\s+/g, '-'),
+//       },
+//     }));
 
-    return { paths, fallback: 'blocking' };
-  } catch (error) {
-    console.error('Error generating static paths:', error);
-    return { paths: [], fallback: 'blocking' };
-  }
-}
+//     return { paths, fallback: 'blocking' };
+//   } catch (error) {
+//     console.error('Error generating static paths:', error);
+//     return { paths: [], fallback: 'blocking' };
+//   }
+// }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const { slug } = params;
 
   try {
@@ -55,13 +55,13 @@ export async function getStaticProps({ params }) {
         product: matched,
         imageUrl,
       },
-       revalidate: 60
     };
   } catch (error) {
-    console.error('Error generating static props:', error);
+    console.error('Error fetching product for SSR:', error);
     return { notFound: true };
   }
 }
+
 
 const ProductDetailPage = ({ product, imageUrl }) => {
   console.log(product)
