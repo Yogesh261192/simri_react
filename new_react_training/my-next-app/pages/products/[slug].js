@@ -55,6 +55,7 @@ export async function getStaticProps({ params }) {
         product: matched,
         imageUrl,
       },
+       revalidate: 60
     };
   } catch (error) {
     console.error('Error generating static props:', error);
