@@ -125,13 +125,22 @@ const ProductDetailPage = ({ product, imageUrl }) => {
                 title: 'Description',
                 content: (
                   <>
-                    <p className="text-gray-700 mb-4 leading-relaxed">
-                      {product.description}
-                    </p>
+                    <p
+  className="text-gray-700 leading-relaxed"
+  dangerouslySetInnerHTML={{
+    __html: product.description,
+  }}
+></p>
                     <h3 className="font-semibold text-gray-800 mt-4 mb-2">
                       History & Cultural Significance
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">{product.history}</p>
+                    <p
+  className="text-gray-700 leading-relaxed"
+  dangerouslySetInnerHTML={{
+    __html: product.history,
+  }}
+></p>
+                    {/* <p className="text-gray-700 leading-relaxed">{product.history}</p> */}
                   </>
                 ),
               },
@@ -144,6 +153,7 @@ const ProductDetailPage = ({ product, imageUrl }) => {
                     <InfoItem label="Fat" value={product.fat || '18g'} />
                     <InfoItem label="Carbs" value={product.carbs || '35g'} />
                     <InfoItem label="Protein" value={product.protein || '5g'} />
+                    <InfoItem label="calcium" value={product.calcium || '5g'} />
                   </div>
                 ),
               },
@@ -152,8 +162,20 @@ const ProductDetailPage = ({ product, imageUrl }) => {
                 title: 'Storage & Preparation',
                 content: (
                   <>
-                    <p className="mb-4 text-gray-700">{product.storage}</p>
-                    <p className="text-gray-700">{product.preparation}</p>
+                  <p
+  className="text-gray-700 leading-relaxed"
+  dangerouslySetInnerHTML={{
+    __html: product.storage,
+  }}
+></p>
+                    {/* <p className="mb-4 text-gray-700">{product.storage}</p> */}
+                    <p
+  className="text-gray-700 leading-relaxed"
+  dangerouslySetInnerHTML={{
+    __html: product.preparation,
+  }}
+></p>
+                    {/* <p className="text-gray-700">{product.preparation}</p> */}
                   </>
                 ),
               },
