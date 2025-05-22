@@ -63,6 +63,7 @@ export async function getStaticProps({ params }) {
 }
 
 const ProductDetailPage = ({ product, imageUrl }) => {
+  console.log(product)
   const [expandedSection, setExpandedSection] = useState('description');
 
   const toggleSection = section => {

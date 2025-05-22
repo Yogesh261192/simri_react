@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // Required for static export
- trailingSlash: true,
+  reactStrictMode: true,
+  trailingSlash: true, // Optional — keeps trailing slashes in URLs
   images: {
-    unoptimized: true, // ← ADD THIS LINE
+    unoptimized: true, // For EC2/static image compatibility (optional)
     remotePatterns: [
       {
         protocol: 'https',
