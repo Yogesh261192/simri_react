@@ -248,7 +248,7 @@ exports.authenticate = async (req, res) => {
     
     const html =  `<h2>Hello Somesh,</h2>
     <p>Please verify the account ${req.body.email}</p>
-    
+  
     <br>
     <p>SIMDI</p>
     `

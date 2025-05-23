@@ -18,12 +18,18 @@ export default function EmailVerificationPage() {
     const decryptAndLogin = async () => {
       try {
         const decoded = decodeURIComponent(userId);
+        console.log(decoded)
         const bytes = CryptoJS.AES.decrypt(decoded, '68302e19-9978-8000-aa2b-cfbe05cbe42f');
+        console.log(bytes, 'ddada')
         const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-         const user = await account.get();
-        console.log(user, 'decypted')
+        try {
+          const user = await account.get();
+        // console.log(user, 'decypted')
         if(user){
           await account.deleteSession('current');
+        }
+        } catch (error) {
+          console.log(error)
         }
         await account.createEmailPasswordSession(decrypted.id, decrypted.password);
         const currentUser = await account.get();
