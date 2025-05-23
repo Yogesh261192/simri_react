@@ -268,7 +268,7 @@ const [orders, setOrders]= useState(false)
                   <input type="checkbox" className="rounded text-[#2C5530] focus:ring-[#2C5530]" />
                   <span className="ml-2 text-sm text-gray-600">Remember me</span>
                 </label>
-                <a href="#" className="text-sm text-[#2C5530] hover:text-[#2C5530]/80">Forgot password?</a>
+                {/* <a href="#" className="text-sm text-[#2C5530] hover:text-[#2C5530]/80">Forgot password?</a> */}
               </div>
 
               <button
