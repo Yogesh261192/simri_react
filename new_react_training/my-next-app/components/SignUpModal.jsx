@@ -5,6 +5,7 @@ import { useToast } from './ToastContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useRouter } from 'next/router';  // ✅ Import useRouter
 import { useRedirect } from './Common';
+import CryptoJS from 'crypto-js';
 
 
 import { useUser } from './userContext';
@@ -13,7 +14,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
     const router = useRouter(); // ✅ Use the useRouter hook
      const redirect = useRedirect();
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser } = useUser();
+  const { setUser, fetchUser } = useUser();
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { showToast } = useToast();
   const [formData, setFormData] = useState({
@@ -43,19 +44,36 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
 
     try {
 
-      let res= await account.create('unique()', formData.email, formData.password, formData.name);
+      // let res= await account.create('unique()', formData.email, formData.password, formData.name);
       // const data = await res.json();
-      console.log(res, 'tahahahha')
+      // console.log(res, 'tahahahha')
       // console.log(data)
-      if (!res.$id) {
-            showToast({ message: "Please try again", type: "error" })
-        return
-      }
+      // if (!res.$id) {
+      //       showToast({ message: "Please try again", type: "error" })
+      //   return
+      // }
 
-      await account.createEmailPasswordSession(formData.email, formData.password);
-      const user = await account.get(); 
+      // await account.createEmailPasswordSession(formData.email, formData.password);
+      // const user = await account.get(); 
       // setUser(user)
-
+      const secretKey = '68302e19-9978-8000-aa2b-cfbe05cbe42f';
+      const data = {
+      id: formData.email,
+       password: formData.password
+     };
+     const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
+     const urlSafeEncrypted = encodeURIComponent(encrypted);
+      let response = await fetch("http://localhost:5000/verfication-email", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // 🔥 This is essential
+        },
+        body: JSON.stringify({
+              email:urlSafeEncrypted,
+              username:formData.name
+            })
+      });
+      
       let urlDetails= await account.createVerification('http://simdi.in/emailverification'); // must be whitelisted in Appwrite
       // console.log(urlDetails);
        await account.deleteSession('current');
