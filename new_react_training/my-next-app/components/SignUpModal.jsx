@@ -44,18 +44,11 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
 
     try {
 
-      // let res= await account.create('unique()', formData.email, formData.password, formData.name);
-      // const data = await res.json();
-      // console.log(res, 'tahahahha')
-      // console.log(data)
-      // if (!res.$id) {
-      //       showToast({ message: "Please try again", type: "error" })
-      //   return
-      // }
-
-      // await account.createEmailPasswordSession(formData.email, formData.password);
-      // const user = await account.get(); 
-      // setUser(user)
+      let res= await account.create('unique()', formData.email, formData.password, formData.name);
+      if (!res.$id) {
+            showToast({ message: "Please try again", type: "error" })
+        return
+      }
       const secretKey = '68302e19-9978-8000-aa2b-cfbe05cbe42f';
       const data = {
       id: formData.email,
@@ -63,7 +56,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
      };
      const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
      const urlSafeEncrypted = encodeURIComponent(encrypted);
-      let response = await fetch("http://localhost:5000/verfication-email", {
+      let response = await fetch("https://simdi.in/verfication-email", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // 🔥 This is essential
@@ -73,11 +66,6 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
               username:formData.name
             })
       });
-      
-      let urlDetails= await account.createVerification('http://simdi.in/emailverification'); // must be whitelisted in Appwrite
-      // console.log(urlDetails);
-       await account.deleteSession('current');
-      // setUser(null); // Clear user in context
 
       showToast({ message: "Sign Up success. Please check your email for verification link", type: "success" })
        setTimeout(() => {
