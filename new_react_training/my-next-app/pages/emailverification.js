@@ -36,15 +36,15 @@ export default function EmailVerificationPage() {
         setUser(currentUser);
         setMessage('✅ Email verified!');
         sendVerify(decrypted.id);
-        // setTimeout(() => redirect('/'), 1500);
+        setTimeout(() => redirect('/'), 1500);
       } catch (error) {
         console.error("Verification failed", error);
         setMessage('Verification failed.');
-        // setTimeout(() => redirect('/'), 1500);
+        setTimeout(() => redirect('/'), 1500);
       }
     };
     const sendVerify= async(email)=>{
-      let response = await fetch("https://simdi.in/authenticate", {
+      let response = await fetch("/api/authenticate", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // 🔥 This is essential

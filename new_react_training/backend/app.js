@@ -1,4 +1,5 @@
-const express = require('express');
+try {
+  const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -9,7 +10,7 @@ const { registerUser, confirmOrder , confirmBooking, confirmDilevery, verifyEmai
 const app = express();
 
 // Define allowed origins
-const allowedOrigins = ['https://simdi.in', 'https://www.simdi.in', 'http://localhost:3000', 'http://localhost:5000'];
+const allowedOrigins = ['https://simdi.in', 'https://www.simdi.in'];
 
 // CORS configuration
 const corsOptions = {
@@ -49,3 +50,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+} catch (error) {
+  console.log(error)
+}

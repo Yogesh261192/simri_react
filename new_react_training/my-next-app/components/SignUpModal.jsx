@@ -56,7 +56,7 @@ const SignUpModal = ({ setIsSignUpOpen, setIsOtpOpen, setUserId }) => {
      };
      const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
      const urlSafeEncrypted = encodeURIComponent(encrypted);
-      let response = await fetch("https://simdi.in/verfication-email", {
+      let response = await fetch("/api/verification", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // 🔥 This is essential

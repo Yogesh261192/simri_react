@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { account, databases } from '../appwriteConfig';
 import { useToast } from './ToastContext';
 const order_id= "6740474900354338e949"
+// import ddd from "../pages/api"
 
 const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
        const [formData, setFormData] = useState({
@@ -42,18 +43,20 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
      const user = await account.get(); // fetch user details
          console.log(user)
           
-       let response = await fetch("https://simdi.in/confirm_order", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // 🔥 This is essential
-        },
-        body: JSON.stringify({
-              email: user.email,
-              total_amount:total,
-              items:cartItems,
-              details: formData  
-            })
-      });
+       let response = await fetch("/api/confirm-order", {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    email: user.email,
+    total_amount: total,
+    items: cartItems,
+    details: formData
+  })
+});
+
+const result = await response.json();
       
       let db= await databases.createDocument(order_id, "6742d9eb00270c32b419", "unique()",
         {
@@ -69,15 +72,10 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
       )
          setLoading(false)
          clearCart()
-       
-     
-      // console.log(response, 'response')
+  
              showToast({message:"Please check your email for details", type:"success"})
               onClose(false)
   }
-//   function handleChange(e){
-//     e.preventDefault();
-//   }
   
   
   return (
@@ -94,7 +92,9 @@ const OrderConfirmationModal = ({ isOpen, onClose, onConfirm}) => {
             <i className="fas fa-times"></i>
           </button>
         </div>
-
+           <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-4 text-sm">
+    <strong>Note:</strong> We are currently only accepting <span className="font-semibold">UPI or Cash</span>. Payment details will be sent via email.
+  </div>
         <form className="space-y-4" onSubmit={onConfirm}>
           <textarea
             name="address"

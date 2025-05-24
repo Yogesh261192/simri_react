@@ -177,7 +177,7 @@ export default function Rides() {
 
 
       try {
-        const res = await fetch("https://simdi.in/confirm_booking", {
+        const res = await fetch("/api/ride_confirm", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -236,7 +236,7 @@ export default function Rides() {
         }
       )
       try {
-        const res = await fetch(" https://simdi.in/confirm_delivery", {
+        const res = await fetch("/api/delivery", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),

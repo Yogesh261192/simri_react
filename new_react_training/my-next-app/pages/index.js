@@ -12,7 +12,8 @@ export default function HomePage() {
         <title>SIMDI</title>
         <meta name="description" content="pahadi and uttrakhand products as well as cab booking for char dham and all desitanation in himachal and uttrakhand" />
         <meta name="keywords" content="pahadi, uttrakhand, simdi, ride, booking, products,
-        mahila, mandal" />
+        mahila, mandal, ride, badrinath, kedarnath, gangotri, pauri, garhwal" />
+        
         <meta name="author" content="yogesh mamgain" />
         <link rel="canonical" href="https://simdi.in" />
         {/* Open Graph / Facebook */}

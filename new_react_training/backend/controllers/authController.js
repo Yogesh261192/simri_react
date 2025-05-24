@@ -216,18 +216,11 @@ try {
 exports.verifyEmail = async (req, res) => {
   try {
     const encryptedEmail = decodeURIComponent(req.body.email); // decode URL-safe base64
-
     const bytes = CryptoJS.AES.decrypt(encryptedEmail, '68302e19-9978-8000-aa2b-cfbe05cbe42f');
     const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-    // Re-encrypt to use in verification link (optional, you can use the same one)
-    // console.log(decrypted, 'deccc')
     const encryptedAgain = encodeURIComponent(
       CryptoJS.AES.encrypt(JSON.stringify(decrypted), '68302e19-9978-8000-aa2b-cfbe05cbe42f').toString()
     );
-
-    const verificationLink = `http://localhost:3000/email-verification?userId=${encryptedAgain}`;
-
     const html = sendVerificationEmail(req.body.username, encryptedAgain);
 
     await transporter.sendMail({
